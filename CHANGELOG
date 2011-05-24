@@ -1,0 +1,57 @@
+APPLICATION=MySQLi DB Class
+
+V0.10:
+
+01-Jan-2009 -
+
+16-Dec-2008 - Added new methods:
+              * QueryResult()
+              * FreeResult()
+
+15-Dec-2008 - Added new methods:
+              * ConvertMySQLDate()
+              * LastInsertId()
+              * EscapeString()
+              * set_TimeNames()
+              * get_TimeNames()
+
+24-Aug-2008 - Added new methods:
+              * AffectedRows()
+              * GetErrNo()
+              * GetErrorText()
+
+16-Mar-2008 - Added new methods:
+              * Query()
+              * Commit()
+              * RollBack()
+              * SetAutoCommit()
+              * GetAutoCommit()
+
+            - Added possibility to configure the TCP port used to connect
+              to the MySQL server.
+
+14-Mar-2008 - Added first example "test_general.php" which tests basic
+              class functionality. Ported OCI8 test functions to MySQLi.
+
+            - Added new methods:
+              * SendMailOnError()
+              * GetQueryTime()
+              * GetQueryCount()
+              * Version()
+
+13-Mar-2008 - Added constructor and the following methods:
+              * Connect()
+              * Disconnect()
+              * GetDebug()
+              * SetDebug()
+              * PrintDebug()
+              * getmicrotime()
+              * SetErrorHandling()
+              * Print_Error()
+              * GetClassVersion()
+              * GetConnectionHandle()
+              * SetConnectionHandle()
+
+10-Mar-2008 - Initial version, started as clone of MySQL & OCI8 class.
+-----------------------------------------------------------------------------
+$Id: CHANGELOG,v 1.5 2009/01/01 11:47:48 siegel Exp $
