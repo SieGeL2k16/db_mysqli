@@ -4,13 +4,14 @@
  * @package db_MySQLi
  * @subpackage Examples
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 0.10 (14-Mar-2008)
- * $Id: functions.inc.php,v 1.1 2008/03/16 09:20:54 siegel Exp $
+ * @version 0.11 (24-Aug-2014)
+ * $Id$
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
-
-error_reporting(E_ALL);   // Activate E_NOTICE to see coding warnings
-
+/**
+ * Make sure that we get noticed about EVERYTHING problematic in our code:
+ */
+ini_set('error_reporting' , E_ALL|E_NOTICE|E_STRICT);
 /**
  * Load in the class
  */
@@ -50,38 +51,5 @@ function WhichBR()
 function DBFooter($lf, &$dbh)
   {
   printf("%sQueries: %d | Time required: %5.3fs%s",$lf,$dbh->GetQueryCount(),$dbh->GetQueryTime(),$lf);
-  }
-
-/**
- * Checks if given Object name exists inside the database.
- * If checked object does not exist function can auto create the object if required DML is supplied
- * @param mixed &$dbh The database object.
- * @param string $objectname Name of object to check.
- * @param string $dml_sql Required SQL to create the object if it does not exist.
- * @return bool TRUE if Object exists else false.
- */
-function CheckForDBobject(&$dbh, $objectname, $dml_sql = '')
-  {
-  $result = $dbh->Query("SELECT COUNT(*) AS CNT FROM USER_OBJECTS WHERE OBJECT_NAME = :obj", OCI_ASSOC, 0, $objectname);
-  if(intval($result['CNT']) > 0)
-    {
-    return(true);
-    }
-  /* If no sql to create object is supplied we return false as object does not exist. */
-  if($dml_sql == '')
-    {
-    return(false);
-    }
-  /* If $dml_sql != '' we try to create the object in question, and if this does not work we return false. */
-  $result = $dbh->Query($dml_sql,OCI_ASSOC, 1);
-  if($result)
-    {
-    $d = WhichBR();
-    $error = $dbh->GetErrorText();
-    printf("OCI ERROR: %s-%s%s",$result,$error,$d['LF']);
-    return(false);
-    }
-  /* All is okay return true now. */
-  return(true);
   }
 ?>

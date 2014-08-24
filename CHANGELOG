@@ -1,8 +1,31 @@
-APPLICATION=MySQLi DB Class
+APPLICATION=db_MySQLi Class
+
+V0.11:
+
+24-Aug-2014 - Added all examples from MySQL() class, also added new tests.
+
+            - Added new methods():
+              * Set_CharSet()
+              * Get_CharSet()
+              * EnableCompatibleMode()
+							* DescTable()
+							* GetErrorHandling()
+							* AffectedRows()
+							* NumRows()
+							* PerformNewInsert()
+							* SetPConnect()
+
+            - Changed constructor method, now it is defined as __construct(),
+              also changed all class variables and constants.
+
+            - During PHP's decision to drop the mysql extension in favour of
+              the mysqli class, it was necessary to complete this class as
+              a replacement for my old mysql class. This in turn requires
+              renaming of all defines to match the old class. Also code
+              from old class ported to this class to make it usable as if
+              it was the old class.
 
 V0.10:
-
-01-Jan-2009 -
 
 16-Dec-2008 - Added new methods:
               * QueryResult()
@@ -54,4 +77,4 @@ V0.10:
 
 10-Mar-2008 - Initial version, started as clone of MySQL & OCI8 class.
 -----------------------------------------------------------------------------
-$Id: CHANGELOG,v 1.5 2009/01/01 11:47:48 siegel Exp $
+$Id$
