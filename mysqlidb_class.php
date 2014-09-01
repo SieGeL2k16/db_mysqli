@@ -189,7 +189,7 @@ class db_MySQLi
 	 * You can enable this by setting the define MYSQLDB_COMPATIBLE_MODE
 	 * to TRUE (defaults to FALSE)
 	 */
-	private function EnableCompatibleMode()
+	private function SetCompatMode()
 		{
 		if(!defined('DBOF_DEBUGOFF'))
 			{
@@ -215,6 +215,19 @@ class db_MySQLi
 			{
 			define('DBOF_RETURN_ALL_ERRORS', db_MySQLi::DBOF_RETURN_ALL_ERRORS);
 			}
+    if(!defined('MYSQL_ASSOC'))
+      {
+      define('MYSQL_ASSOC', 1);
+      }
+    if(!defined('MYSQL_NUM'))
+      {
+      define('MYSQL_NUM', 2);
+      }
+    if(!defined('MYSQL_BOTH'))
+      {
+      define('MYSQL_BOTH', 3);
+      }
+
 		} // EnableCompatibleMode()
 
   /**

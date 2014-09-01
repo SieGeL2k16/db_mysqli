@@ -2,6 +2,9 @@ APPLICATION=db_MySQLi Class
 
 V0.11:
 
+01-Sep-2014 - Renamed "EnableCompatibleMode()" to "SetCompatMode()" and added
+              missing defines for MYSQL_ASSOC, MYSQL_BOTH and MYSQL_NUM
+
 24-Aug-2014 - Added all examples from MySQL() class, also added new tests.
 
             - Added new methods():
