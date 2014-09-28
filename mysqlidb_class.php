@@ -7,8 +7,7 @@
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
  * @package db_MySQLi
- * @version 0.11 (24-Aug-2014)
- * $Id: mysqlidb_class.php 27 2014-09-01 20:07:14Z siegel $
+ * @version 0.12 (28-Sep-2014)
  * @see dbdefs.inc.php
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
@@ -20,7 +19,7 @@
 class db_MySQLi
   {
  /** Class version. */
-  private $classversion = '0.11';
+  private $classversion = '0.12';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -572,7 +571,7 @@ class db_MySQLi
 
   /**
    * Fetches next row from result handle.
-   * Returns either numeric (MYSQL_NUM) or associative (MYSQL_ASSOC) array
+   * Returns either numeric (MYSQLI_NUM) or associative (MYSQLI_ASSOC) array
    * for one data row as pointed to by result var.
    * @param mixed $result The resource identifier as returned by QueryResult()
    * @param integer $resflag How you want the data to be returned:
@@ -1362,8 +1361,8 @@ class db_MySQLi
 
  /**
    * Sets connection behavour.
-   * If FALSE class uses mysql_connect to connect.
-   * If TRUE class uses mysql_pconnect to connect (Persistant connection).
+   * If FALSE class uses mysqli_connect to connect.
+   * If TRUE class uses mysqli_connect to connect with prefix "p:" (Persistant connection).
    * @param boolean The new setting for persistant connections.
    * @return boolean The previous state.
    * @since 0.11

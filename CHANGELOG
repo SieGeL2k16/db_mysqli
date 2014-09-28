@@ -1,5 +1,9 @@
 APPLICATION=db_MySQLi Class
 
+V0.12:
+
+28-Sep-2014 - Removed all remaining references to MYSQL inside the documentation.
+
 V0.11:
 
 01-Sep-2014 - Renamed "EnableCompatibleMode()" to "SetCompatMode()" and added
