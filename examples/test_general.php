@@ -6,7 +6,7 @@
  * @package db_MySQLi
  * @subpackage Examples
  * @version 0.10 (14-Mar-2008)
- * $Id$
+ * $Id: test_general.php 26 2014-08-24 22:44:53Z siegel $
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  * @filesource
  */

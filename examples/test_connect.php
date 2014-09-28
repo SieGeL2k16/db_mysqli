@@ -7,7 +7,7 @@
  * @package db_MySQL
  * @subpackage Examples
  * @version 0.36 (21-Sep-2008)
- * $Id$
+ * $Id: test_connect.php 26 2014-08-24 22:44:53Z siegel $
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  * @filesource
  */

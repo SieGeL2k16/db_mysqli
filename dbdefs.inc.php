@@ -5,7 +5,7 @@
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
  * @package db_MySQLi
  * @version 0.11 (24-Aug-2014)
- * $Id$
+ * $Id: dbdefs.inc.php 26 2014-08-24 22:44:53Z siegel $
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 

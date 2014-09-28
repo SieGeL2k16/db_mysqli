@@ -8,7 +8,7 @@
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
  * @package db_MySQLi
  * @version 0.11 (24-Aug-2014)
- * $Id$
+ * $Id: mysqlidb_class.php 27 2014-09-01 20:07:14Z siegel $
  * @see dbdefs.inc.php
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */

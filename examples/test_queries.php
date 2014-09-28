@@ -9,7 +9,7 @@
  * @package db_MySQLi
  * @subpackage Examples
  * @version 0.11 (24-Aug-2014)
- * $Id$
+ * $Id: test_queries.php 26 2014-08-24 22:44:53Z siegel $
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 /**
