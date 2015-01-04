@@ -6,9 +6,7 @@
  * See docs/ for a complete overview of all methods.
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQLi
- * @version 0.12 (28-Sep-2014)
- * @see dbdefs.inc.php
+ * @version 0.1.3 (05-Jan-2015)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -19,7 +17,7 @@
 class db_MySQLi
   {
  /** Class version. */
-  private $classversion = '0.12';
+  private $classversion = '0.1.3';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -91,36 +89,27 @@ class db_MySQLi
   /** DEBUG: Debug to error.log */
   const DBOF_DEBUG_FILE          = 4;
 
-	/**#@+
-	 * Connect and error handling.
-	 * If DBOF_SHOW_NO_ERRORS is set and an error occures,
-	 * the class still reports an an error of course but the error
-	 * shown is reduced in informational details to avoid showing
-	 * sensible informations in a productive environment.
-	 * If DBOF_SHOW_ALL_ERRORS is set the maximum possible details are shown.
-	 * Set RETURN_ALL_ERRORS if you want to handle errors yourself, in
-	 * this case the class returns error codes if something goes wrong.
-	 */
+  /** Displays errors with reduced informations and terminates execution. */
 	const	DBOF_SHOW_NO_ERRORS			= 0;
+  /** Displays errors with all available informations and terminates execution. */
 	const DBOF_SHOW_ALL_ERRORS		= 1;
+  /** Returns the error code back to the callee. You are responsible for error management. */
 	const DBOF_RETURN_ALL_ERRORS	= 2;
-	/**#@-*/
 
-	/**#@+
-	 * These defines are used in DescTable().
-	 */
+  /** DescTable(): Column name. */
 	const DBOF_MYSQL_COLNAME  = 0;
+  /** DescTable(): Column type. */
 	const DBOF_MYSQL_COLTYPE  = 1;
+  /** DescTable(): Column size. */
 	const DBOF_MYSQL_COLSIZE  = 2;
+  /** DescTable(): Column flags. */
 	const DBOF_MYSQL_COLFLAGS = 3;
-	/**#@-*/
 
   /**
    * Constructor of class.
    * The constructor takes default values from dbdefs.inc.php.
    * Please see this file for further informations about the setable options.
    * @param string $extconfig Optional other filename for dbdefs.inc.php, defaults to "dbdefs.inc.php".
-   * @see dbdefs.inc.php
    */
   function __construct($extconfig='')
     {
@@ -185,8 +174,7 @@ class db_MySQLi
 
 	/**
 	 * Compatibility method to simulate old db_mysql class behavour.
-	 * You can enable this by setting the define MYSQLDB_COMPATIBLE_MODE
-	 * to TRUE (defaults to FALSE)
+	 * You can enable this by setting the define MYSQLDB_COMPATIBLE_MODE to TRUE (defaults to FALSE).
 	 */
 	private function SetCompatMode()
 		{
@@ -358,7 +346,7 @@ class db_MySQLi
 
   /**
    * Prints out MySQL Error in own <div> container and exits.
-   * Please note that this function does not return as long as you have not set DBOF_RETURN_ALL_ERRORS!
+   * Please note that this function does not return as long as you have not set db_MySQLi::DBOF_RETURN_ALL_ERRORS!
    * @param string $ustr User-defined Error string to show
    * @param mixed $var2dump Optionally a variable to print out with print_r()
  	 * @param integer $exit_on_error If set to default of 1 this function terminates execution of the script by calling exit, else it simply returns.
@@ -746,7 +734,7 @@ class db_MySQLi
   /**
    * Retrieve current error reporting level.
    * @return integer The Error Handling mode currently in use.
-   * @since 0.11
+   * @since 0.1.1
    */
   public function GetErrorHandling($val)
     {
@@ -777,7 +765,7 @@ class db_MySQLi
    * Checks if we are already connected to our database.
    * If not terminates by calling Print_Error().
    * @see Print_Error()
-   * @since 0.11
+   * @since 0.1.1
    */
   public function CheckSock()
     {
@@ -788,12 +776,10 @@ class db_MySQLi
     } // CheckSock()
 
   /**
-   * Send error email if programmer has defined a valid email address and
-   * enabled it with the define MYSQLDB_SENTMAILONERROR.
+   * Send error email if programmer has defined a valid email address and enabled it with the define MYSQLDB_SENTMAILONERROR.
    * @param integer $merrno MySQL errno number
    * @param string $merrstr MySQL error description
    * @param string $uerrstr User-supplied error description
-   * @see dbdefs.inc.php
    */
   private function SendMailOnError($merrno,$merrstr,$uerrstr)
     {
@@ -858,7 +844,7 @@ class db_MySQLi
    * @param bool $state TRUE = Autocommit enabled, FALSE = autocommit disabled.
    * @param resource $extsock Optional an external mysqli connect resource, default is internally stored resource.
    * @return bool The returnvalue of mysqli_autocommit. FALSE in any case if no open link is found.
-   * @see mysqli_autocommit
+   * @see http://php.net/manual/en/mysqli.autocommit.php
    */
   public function SetAutoCommit($state,$extsock = -1)
     {
@@ -882,7 +868,7 @@ class db_MySQLi
    * Note that this only works for connected (!) databases, as we have to read the state from the server!
    * @param resource $extsock Optional an external mysqli connect resource. Default is internally stored resource.
    * @return bool TRUE = autocommit is enabled, FALSE = autocommit is disabled.
-   * @see mysqli_autocommit
+   * @see http://php.net/manual/en/mysqli.autocommit.php
    */
   public function GetAutoCommit($extsock = -1)
     {
@@ -927,7 +913,7 @@ class db_MySQLi
    * Rollback current transaction.
    * @param resource $extsock Optional an external mysqli connect resource. Default is internally stored resource.
    * @return bool The return value from mysqli_rollback()
-   * @see mysqli_rollback
+   * @see http://php.net/manual/en/mysqli.rollback.php
    */
   public function Rollback($extsock = -1)
     {
@@ -984,7 +970,7 @@ class db_MySQLi
    * Retrieve last mysql error number.
    * @param mixed $other_sock Optionally your own connection handle to check, else internal will be used.
    * @return integer The MySQL error number of the last operation
-   * @see mysqli_errno
+   * @see http://php.net/manual/en/mysqli.errno.php
    */
   public function GetErrno($other_sock = -1)
     {
@@ -1016,7 +1002,7 @@ class db_MySQLi
    * Retrieve last mysql error description.
    * @param mixed $other_sock Optionally your own connection handle to check, else internal will be used.
    * @return string The MySQL error description of the last operation
-   * @see mysqli_error
+   * @see http://php.net/manual/en/mysqli.error.php
    */
   public function GetErrorText($other_sock = -1)
     {
@@ -1055,8 +1041,6 @@ class db_MySQLi
    * @param string $mysqldate The MySQL default datestring in format YYYY-MM-DD HH:MI:SS
    * @param string $fmtstring A strftime() compatible format string.
    * @return string The converted date string.
-   * @see strftime
-   * @see mktime
    */
   public function ConvertMySQLDate($mysqldate,$fmtstring)
     {
@@ -1137,7 +1121,7 @@ class db_MySQLi
    * See http://dev.mysql.com/doc/refman/5.0/en/charset-charsets.html for a list of supported character sets.
    * @param string $charset The charset to set on the MySQL server side.
    * @return integer 1 If all works, else 0 in case of an error.
-   * @since 0.11
+   * @since 0.1.1
    */
   public function Set_CharSet($charset)
     {
@@ -1156,7 +1140,7 @@ class db_MySQLi
    * Note that MySQL returns a list of settings, so this method returns all character_set related
    * settings as an associative array.
    * @return array The current settings for the character_set variables.
-   * @since 0.11
+   * @since 0.1.1
    */
   public function Get_CharSet()
     {
@@ -1173,7 +1157,7 @@ class db_MySQLi
 	/**
 	 * Returns text representation for a given column type.
 	 * Taken from http://de1.php.net/manual/en/mysqli-result.fetch-field-direct.php#114882
-	 * @param integer $type_id The Id to convert
+	 * @param integer $type_id The Id to convert.
 	 */
 	public static function Type2TXT($type_id)
 		{
@@ -1190,7 +1174,7 @@ class db_MySQLi
 	/**
 	 * Returns text representation for column flags.
 	 * Taken from http://de1.php.net/manual/en/mysqli-result.fetch-field-direct.php#114882
-	 * @param integer $flags_num The Flags to convert
+	 * @param integer $flags_num The Flags to convert.
 	 */
 	public static function Flags2TXT($flags_num)
 		{
@@ -1216,7 +1200,7 @@ class db_MySQLi
    * 3 => Field flags (like auto_increment).
    * @param string $tname Name of table to describe.
    * @return array Numerical array with all required table informations.
-   * @since 0.11
+   * @since 0.1.1
    */
   public function DescTable($tname)
     {
@@ -1257,7 +1241,7 @@ class db_MySQLi
    * Use this after a SELECT or SHOW etc. command has been executed.
    * For DML operations like INSERT, UPDATE, DELETE the method AffectedRows() has to be used.
    * @return integer Number of affected rows.
-   * @since 0.11
+   * @since 0.1.1
    */
   function NumRows()
     {
@@ -1363,9 +1347,9 @@ class db_MySQLi
    * Sets connection behavour.
    * If FALSE class uses mysqli_connect to connect.
    * If TRUE class uses mysqli_connect to connect with prefix "p:" (Persistant connection).
-   * @param boolean The new setting for persistant connections.
+   * @param boolean $conntype The new setting for persistant connections.
    * @return boolean The previous state.
-   * @since 0.11
+   * @since 0.1.1
    */
   function SetPConnect($conntype)
     {
@@ -1377,6 +1361,17 @@ class db_MySQLi
     $this->usePConnect = $conntype;
     return($oldtype);
     } // SetPConnect()
+
+  /**
+   * Returns current persistant connection flag.
+   * @return boolean The current setting (TRUE/FALSE).
+   * @since 0.1.3
+   */
+  public function GetPConnect()
+    {
+    return($this->usePConnect);
+    }
+
 
   } // db_MySQLi()
 ?>

@@ -1,9 +1,10 @@
 #!/bin/sh
-# -o PDF:default
-phpdoc \
-       -d /html/private/PHP-Classes/MySQLi_class/ \
-       -i *.png,*.gif,*.jpg,*.sh,*.zip,*.pak,*.html,*.css,*.ico,*.gz,*.js,*.txt,*.sql,*.csv,tests/ \
-       -t /html/private/PHP-Classes/MySQLi_class/docs \
-       -ti "MySQL improved PHP Class for PHP4 / PHP5" \
-       -dn db_MySQLi 
+echo "Removing old docs."
+rm -rf ./docs/*
+echo "Creating class documentation."
+phpdoc run \
+ --filename dbdefs.inc.php,mysqlidb_class.php \
+ -t ./docs \
+ --title  "MySQL Class utilizing the MySQLi PHP extension" \
+ --defaultpackagename "db_MySQLi"
 
