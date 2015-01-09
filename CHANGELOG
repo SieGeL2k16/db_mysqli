@@ -2,6 +2,10 @@ APPLICATION=db_MySQLi Class
 
 V0.1.3:
 
+09-Jan-2014 - Public release as v0.1.3.
+
+            - Finished documentation.
+
 05-Jan-2014 - Updated documentation and added missing README to release as 0.1.3
 
             - Added method "GetPConnect()" to retrieve persistant connection flag.

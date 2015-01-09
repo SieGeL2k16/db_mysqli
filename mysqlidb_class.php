@@ -176,7 +176,7 @@ class db_MySQLi
 	 * Compatibility method to simulate old db_mysql class behavour.
 	 * You can enable this by setting the define MYSQLDB_COMPATIBLE_MODE to TRUE (defaults to FALSE).
 	 */
-	private function SetCompatMode()
+	public function SetCompatMode()
 		{
 		if(!defined('DBOF_DEBUGOFF'))
 			{
@@ -204,17 +204,16 @@ class db_MySQLi
 			}
     if(!defined('MYSQL_ASSOC'))
       {
-      define('MYSQL_ASSOC', 1);
+      define('MYSQL_ASSOC', MYSQLI_ASSOC);
       }
     if(!defined('MYSQL_NUM'))
       {
-      define('MYSQL_NUM', 2);
+      define('MYSQL_NUM', MYSQLI_NUM);
       }
     if(!defined('MYSQL_BOTH'))
       {
-      define('MYSQL_BOTH', 3);
+      define('MYSQL_BOTH', MYSQLI_BOTH);
       }
-
 		} // EnableCompatibleMode()
 
   /**
@@ -736,7 +735,7 @@ class db_MySQLi
    * @return integer The Error Handling mode currently in use.
    * @since 0.1.1
    */
-  public function GetErrorHandling($val)
+  public function GetErrorHandling()
     {
     return($this->showError);
     } // GetErrorHandling()
