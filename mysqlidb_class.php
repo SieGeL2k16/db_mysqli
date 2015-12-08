@@ -6,7 +6,7 @@
  * See docs/ for a complete overview of all methods.
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 0.1.3 (05-Jan-2015)
+ * @version 0.2.0 (07-Dec-2015)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -17,7 +17,7 @@
 class db_MySQLi
   {
  /** Class version. */
-  private $classversion = '0.1.3';
+  private $classversion = '0.2.0';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -106,6 +106,16 @@ class db_MySQLi
 	const DBOF_MYSQL_COLFLAGS = 3;
 
   /**
+   * Type definitions for QueryHash() / QueryResultHash()
+   * @see http://php.net/manual/en/mysqli-stmt.bind-param.php
+   * @since 0.2.0
+   */
+  const DBOF_TYPE_INT       = 'i';
+  const DBOF_TYPE_DOUBLE    = 'd';
+  const DBOF_TYPE_STRING    = 's';
+  const DBOF_TYPE_BLOB      = 'b';
+
+  /**
    * Constructor of class.
    * The constructor takes default values from dbdefs.inc.php.
    * Please see this file for further informations about the setable options.
@@ -113,6 +123,11 @@ class db_MySQLi
    */
   function __construct($extconfig='')
     {
+    // Check if the mysqli_* functions exists:
+    if(function_exists('mysqli_connect')==false)
+      {
+      throw new Exception('ERROR: mysqli_connect() function does not exist in your PHP installation - class is not useable !');
+      }
     if($extconfig == '')
       {
       require_once('dbdefs.inc.php');
@@ -120,11 +135,6 @@ class db_MySQLi
     else
       {
       require_once($extconfig);
-      }
-    // Check if the mysqli_* functions exists:
-    if(function_exists('mysqli_connect')==false)
-      {
-      throw new Exception('ERROR: mysqli_connect() function does not exist in your PHP installation - class is not useable !');
       }
     // Now check if important defines are correctly set in dbdefs.inc.php
     if(!defined('MYSQLAPPNAME'))
@@ -429,15 +439,24 @@ class db_MySQLi
       }
     if($this->SAPI_type != 'cli')
       {
-      echo("<br>\nPlease inform <a href=\"mailto:".$this->AdminEmail."\">".$this->AdminEmail."</a> about this problem.");
+      echo("<br>\n");
+      if($this->AdminEmail != '')
+        {
+        echo("Please inform <a href=\"mailto:".$this->AdminEmail."\">".$this->AdminEmail."</a> about this problem.");
+        }
       echo("</code>\n");
       echo("</div>\n");
-      echo("<div align=\"right\"><small>PHP V".phpversion()." / MySQLi Class v".$this->classversion."</small></div>\n");
+      echo("<div align=\"right\"><small>PHP ".phpversion()." / db_MySQLi class ".$this->classversion."</small></div>\n");
     	@error_log($this->appname.': Error in '.$filename.': '.$ustr.' ('.chop(strip_tags($errstr)).')',0);
       }
     else
       {
-      echo("\nPlease inform ".$this->AdminEmail." about this problem.\n\nRunning on PHP V".phpversion()." / MySQLi Class v".$this->classversion."\n");
+      echo("\n");
+      if($this->AdminEmail != '')
+        {
+        echo("Please inform ".$this->AdminEmail." about this problem.\n");
+        }
+      echo("\nRunning on PHP ".phpversion()." / db_MySQLi class ".$this->classversion."\n");
       }
     $this->Disconnect();
    	if($exit_on_error)
@@ -506,6 +525,7 @@ class db_MySQLi
     $this->querytime+= ($this->getmicrotime() - $start);
     return($row);
     } // Query()
+
 
   /**
    * Performs a multi-row query and returns result identifier.
@@ -810,7 +830,7 @@ class db_MySQLi
       {
       $uagent = 'n/a';
       }
-    $message = "MySQLiDB Class v".$this->classversion.": Error occured on ".date('r')." !!!\n\n";
+    $message = "db_MySQLi class v".$this->classversion.": Error occured on ".date('r')." !!!\n\n";
     $message.= "      APPLICATION: ".$this->appname."\n";
     $message.= "  AFFECTED SERVER: ".$server."\n";
     $message.= "       USER AGENT: ".$uagent."\n";
@@ -830,11 +850,11 @@ class db_MySQLi
     $message.= "------------------------------------------------------------------------------------\n";
     if(defined('MYSQLDB_MAIL_EXTRAARGS') && MYSQLDB_MAIL_EXTRAARGS != '')
       {
-      @mail($this->AdminEmail,'MySQLiDB Class v'.$this->classversion.' ERROR #'.$merrno.' OCCURED!',$message,MYSQLDB_MAIL_EXTRAARGS);
+      @mail($this->AdminEmail,'db_MySQLi class v'.$this->classversion.' ERROR #'.$merrno.' OCCURED!',$message,MYSQLDB_MAIL_EXTRAARGS);
       }
     else
       {
-      @mail($this->AdminEmail,'MySQLiDB Class v'.$this->classversion.' ERROR #'.$merrno.' OCCURED!',$message);
+      @mail($this->AdminEmail,'db_MySQLi class v'.$this->classversion.' ERROR #'.$merrno.' OCCURED!',$message);
       }
     } // SendMailOnError()
 
@@ -1369,8 +1389,112 @@ class db_MySQLi
   public function GetPConnect()
     {
     return($this->usePConnect);
-    }
+    } // GetPConnect()
 
+  /**
+   * Single query method with Bind var support.
+   * Resflag can be "MYSQLI_NUM" or "MYSQLI_ASSOC" depending on what kind of array you want to be returned.
+   * @param string $querystring The SQL query to send to database.
+   * @param integer $resflag Decides how the result should be returned:
+   *  - MYSQLI_ASSOC = Data is returned as assoziative array
+   *  - MYSQLI_NUM   = Data is returned as numbered array
+   *  - MYSQLI_BOTH  = Data is returned as both numbered and associative array.
+   * @param integer $no_exit Decides how the class should react on errors.
+   *                         If you set this to 1 the class won't automatically exit
+   *                         on an error but instead return the mysqli_errno value.
+   *                         Default of 0 means that the class calls Print_Error()
+   *                         and exists.
+   * @param array &$bindvars The array with bind vars for the given statement.
+   * @return mixed Either an array as result of the query or an error code or TRUE.
+   */
+  public function QueryHash($querystring, $resflag = MYSQLI_ASSOC, $no_exit = 0, &$bindvars=null)
+    {
+    if(!$this->sock)
+      {
+      return($this->Print_Error('QueryHash(): No active Connection!',$querystring));
+      }
+    if($querystring == '')
+      {
+      return($this->Print_Error('QueryHash(): No querystring was supplied!'));
+      }
+    $this->PrintDebug($querystring);
+    $this->currentQuery = $querystring;
+    if($this->showError == db_MySQLi::DBOF_RETURN_ALL_ERRORS)
+      {
+      $no_exit = 1;  // Override if user has set master define
+      }
+    $start = $this->getmicrotime();
+    // If we are called without bind vars, we use the existing Query() function
+    if(is_null($bindvars) === TRUE)
+      {
+      return($this->Query($querystring,$resflag,$no_exit));
+      }
+    // Initialize the statement handle to get proper error codes from mysqli_stmt_prepare()
+    $stmt = mysqli_stmt_init($this->sock);
+    if(mysqli_stmt_prepare($stmt,$querystring) === FALSE)
+      {
+      return($this->Print_Error('QueryHash(): Prepare Statement failure!'));
+      }
+    $args = array($stmt,'');
+    $alist= array();
+    for($b = 0; $b < count($bindvars); $b++)
+      {
+      $args[1] .= $bindvars[$b]['TYPE'];
+      $args[]   = &$bindvars[$b]['VAL'];    // mysqli_stmt_bind_param() requires references!
+      }
+    if(call_user_func_array('mysqli_stmt_bind_param', $args) === FALSE)
+      {
+      return($this->Print_Error('QueryHash(): call_user_func_array() failed!'));
+      }
+    if(mysqli_stmt_execute($stmt) === FALSE)
+      {
+      if($no_exit)
+        {
+        $reterror = @mysqli_errno($this->sock);
+        return($reterror);
+        }
+      else
+        {
+        return($this->Print_Error('QueryHash(): Execute failed!'));
+        }
+      }
+    // Check if we have a result set returned, in this case return only the first row!
+    $metadata = mysqli_stmt_result_metadata($stmt);
+    if($metadata !== FALSE)
+      {
+      if(mysqli_stmt_store_result($stmt) == FALSE)
+        {
+        return($this->Print_Error('QueryHash(): mysqli_stmt_store_result() failure!'));
+        }
+      // Code below taken from http://php.net/manual/en/mysqli-stmt.bind-result.php#102179 and slightly modified - Thank you!
+      $vars = array($stmt);
+      $data = array();
+      $row  = array();
+      while($field = mysqli_fetch_field($metadata))
+        {
+        $vars[] = &$data[$field->name]; // pass by reference
+        }
+      call_user_func_array('mysqli_stmt_bind_result', $vars);
+      $rc = mysqli_stmt_fetch($stmt);   // We fetch here only one row!
+      if($rc === TRUE)
+        {
+        foreach($data as $k=>$v)
+          {
+          $row[$k] = $v;
+          }
+        }
+      else
+        {
+        $row = null;
+        }
+      mysqli_free_result($metadata);
+      }
+    else  // No result set found, so just return TRUE
+      {
+      $row = TRUE;
+      }
+    mysqli_stmt_close($stmt);
+    return($row);
+    } // QueryHash()
 
   } // db_MySQLi()
-?>

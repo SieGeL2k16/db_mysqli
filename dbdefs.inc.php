@@ -4,14 +4,14 @@
  * Configure the database access here together with some other class options.
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
  * @package db_MySQLi\Configuration
- * @version 0.1.3 (05-Sep-2015)
+ * @version 0.2.0 (07-Dec-2015)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
 /**
  * Name of application using this class (used in error.log etc.).
  */
-define('MYSQLAPPNAME' , 'MySQLi_class');
+define('MYSQLAPPNAME' , 'db_MySQLi_class');
 
 /**
  * Hostname/IP address of database.

@@ -4,12 +4,9 @@
  * Examples how to handle connections to MySQL.
  * First connect try is without automatic error handling, second try is with automatic handling on.
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQL
- * @subpackage Examples
- * @version 0.36 (21-Sep-2008)
- * $Id: test_connect.php 26 2014-08-24 22:44:53Z siegel $
+ * @package db_MySQLi\Examples
+ * @version 0.2.0 (07-Dec-2015)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
- * @filesource
  */
 /**
  */

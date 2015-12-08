@@ -1,19 +1,24 @@
-      Documentation for MySQLi Class written by Sascha 'SieGeL' Pfalz
-                    Last updated on 09-Jan-2015
------------------------------------------------------------------------------
+Documentation for db_MySQLi class written by Sascha 'SieGeL' Pfalz
+==================================================================
 
-1. INTRODUCTION
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Last updated on 07-Dec-2015
+---------------------------
+
+
+### 1. INTRODUCTION
+
 This class is used as 1:1 replacement for my old db_mysql class, which will
 stop functioning in the near future, as the PHP devs decided to drop the
 "mysql" extension in favour of the "mysqli" extension.
 
 This class uses the "mysqli" (MySQL improved) extension and has all methods
-the db_MySQL class also provides.
+the db_MySQL class also provides and also provides additional methods during
+the extended functionality of the mysqli extension. So i.e. the bind variables
+are now part of this class.
 
 
-2. REQUIREMENTS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### 2. REQUIREMENTS
+
 To use this class you have to met the following requirements:
 
 - PHP 5.x with enabled "mysqli" extension. Tested with 5.6.4.
@@ -21,8 +26,8 @@ To use this class you have to met the following requirements:
 - MySQL Database, version should not matter. Tested with 5.x
 
 
-3. INSTALLATION AND USAGE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### 3. INSTALLATION AND USAGE
+
 Copy the supplied mysqlidb_class.php to a directory of your choice, a good
 place would be the inc/ directory of your project. Also copy the file
 dbdefs.inc.php to the same directory you have copied the mysqlidb_class.php
@@ -33,88 +38,84 @@ You may give an alternate path to this file in the constructor of this class.
 
 The following defines can be set to use the class inside dbdefs.inc.php:
 
-MYSQLDB_HOST            - Hostname or IP address of target database.
+* MYSQLDB_HOST            - Hostname or IP address of target database.
 
-MYSQLDB_PORT            - Opt. Portnumber of target DB, defaults to 3306.
+* MYSQLDB_PORT            - Opt. Portnumber of target DB, defaults to 3306.
 
-MYSQLDB_USER            - MySQL Username used as default connection.
+* MYSQLDB_USER            - MySQL Username used as default connection.
 
-MYSQLDB_PASS            - MySQL Password for useraccount above.
+* MYSQLDB_PASS            - MySQL Password for useraccount above.
 
-MYSQLDB_DATABASE        - The schema name to use.
+* MYSQLDB_DATABASE        - The schema name to use.
 
-MYSQLAPPNAME            - Name of your application. This is used in error
-                          messages.
+* MYSQLAPPNAME            - Name of your application. This is used in error
+                            messages.
 
-DB_ERRORMODE            - How errors should be handled. Default is to show
-                          only limited informations for safety reasons. See
-                          description of setErrorHandling() for further
-                          details.
+* DB_ERRORMODE            - How errors should be handled. Default is to show
+                            only limited informations for safety reasons. See
+                            description of setErrorHandling() for further
+                            details.
 
-MYSQLDB_ADMINEMAIL      - Specify an email address to be used whenever an
-                          error occures. This email is shown in error messages
-                          and if MYSQLDB_SENTMAILONERROR is set also used to
-                          sent out an automatic mail to that address in case
-                          of an error.
+* MYSQLDB_ADMINEMAIL      - Specify an email address to be used whenever an
+                            error occures. This email is shown in error messages
+                            and if MYSQLDB_SENTMAILONERROR is set also used to
+                            sent out an automatic mail to that address in case
+                            of an error.
 
-MYSQLDB_SENTMAILONERROR - Flag indicating if the class should auto-send emails
-                          to the defined EMail address whenever an error
-                          occures. Set it to 1 to enable auto-sending, and set
-                          it to 0 to disable this behavour.
+* MYSQLDB_SENTMAILONERROR - Flag indicating if the class should auto-send emails
+                            to the defined EMail address whenever an error
+                            occures. Set it to 1 to enable auto-sending, and set
+                            it to 0 to disable this behavour.
 
-MYSQLDB_MAIL_EXTRAARGS  - Use this define to pass additional parameter to the
-                          mail() command in SendmailOnError(). Some servers
-                          might need to set the -f parameter when using PHP's
-                          mail() command, and to allow this also here in the
-                          class you can use this define. Default is unset.
+* MYSQLDB_MAIL_EXTRAARGS  - Use this define to pass additional parameter to the
+                            mail() command in SendmailOnError(). Some servers
+                            might need to set the -f parameter when using PHP's
+                            mail() command, and to allow this also here in the
+                            class you can use this define. Default is unset.
 
-MYSQLDB_USE_PCONNECT    - if set to 1 persistant connections are used,
-                          else standard connects are used. This can be set
-                          also on a script-by-script basis via the method
-                          setPConnect().
+* MYSQLDB_USE_PCONNECT    - if set to 1 persistant connections are used,
+                            else standard connects are used. This can be set
+                            also on a script-by-script basis via the method
+                            setPConnect().
 
-MYSQLDB_CHARACTERSET    - You can set here the character set the class should
-                          set to MySQL during the connect phase. This allows
-                          to set the MySQL communication i.e. to 'utf8'.
-                          If this define is not set the default character set
-                          of MySQL is used.
+* MYSQLDB_CHARACTERSET    - You can set here the character set the class should
+                            set to MySQL during the connect phase. This allows
+                            to set the MySQL communication i.e. to 'utf8'.
+                            If this define is not set the default character set
+                            of MySQL is used.
 
-MYSQLDB_TIME_NAMES      - You can set here the default language used for date
-                          and time translations. Specify here the values as
-                          listed under the following url:
-                          http://dev.mysql.com/doc/refman/5.0/en/locale-support.html
-                          If this define is not set the default language of the
-                          MySQL Server is used.
+* MYSQLDB_TIME_NAMES      - You can set here the default language used for date
+                            and time translations. Specify here the values as
+                            listed under the following url:
+                            http://dev.mysql.com/doc/refman/5.0/en/locale-support.html
+                            If this define is not set the default language of the
+                            MySQL Server is used.
 
-MYSQLDB_COMPATIBLE_MODE - If you are using this class as replacement for my
-                          old "db_MySQL" class, enable this switch and set it
-                          to TRUE. The class will simulate the old class and
-                          auto-define all required defines so that you need to
-                          change only the Constructor call, everything else
-                          should work out-of-the-box. New projects should never
-                          use this and leave it to the default value of FALSE.
+* MYSQLDB_COMPATIBLE_MODE - If you are using this class as replacement for my
+                            old "db_MySQL" class, enable this switch and set it
+                            to TRUE. The class will simulate the old class and
+                            auto-define all required defines so that you need to
+                            change only the Constructor call, everything else
+                            should work out-of-the-box. New projects should never
+                            use this and leave it to the default value of FALSE.
 
 To use the class you have to require() the class code, the rest is done
 automatically when you first instantiate the class. Normally you may have one
 PHP script which includes several others, here would be the ideal place to put
 the require() statement for the class, i.e.:
 
----[SNIP]---
-
+```php
 // ...Your require() statements
 
 require("path/to/mysqlidb_class.php");
 
 // ..Rest of your code here
-
----[SNIP]---
+```
 
 Once this is done and you have added the proper values in dbdefs.inc.php you
 can now start using the class, this would look like this for example:
 
----[SNIP]---
-
-<?php
+```php
 require("mysqlidb_class.php");
 
 $db = new db_MySQLi;
@@ -122,18 +123,14 @@ $db->Connect();
 $mver = $db->Version();
 $db->Disconnect();
 echo("Your MySQL Server is V".$mver);
-?>
-
----[SNAP]---
+```
 
 As you can see in this example the dbdefs.inc.php file is automatically loaded
 when you create the first instance of the db_MySQLi object.
 You can also use a different configfile by specifying a different path to
 your config inside the constructor, like this:
 
----[SNIP]---
-
-<?php
+```php
 require("mysqlidb_class.php");
 
 $db = new db_MySQLi('/path/to/my/own/config.inc.php');
@@ -141,12 +138,10 @@ $db->Connect();
 $mver = $db->Version();
 $db->Disconnect();
 echo("Your MySQL Server is V".$mver);
-?>
+```
 
----[SNAP]---
 
-4. METHOD OVERVIEW
-~~~~~~~~~~~~~~~~~~
+### 4. METHOD OVERVIEW
 
 I've provided a auto-generated method overview inside the docs subfolder of
 the distribution archive which was generated by phpDocumentor.
@@ -450,15 +445,10 @@ choice before the query in question and the class dumps out what happens.
 
 Example:
 
----[SNIP]---
-
-..
+```php
 $db->SetDebug(db_MySQLi::DBOF_DEBUGSCREEN);
 $db->Query('SELECT FOO FROM BAR WHERE DUMMY=1');
-..
-..
-
----[SNAP]---
+```
 
 Would result in dumping out the Query on screen. See examples for further
 details how to use this.
@@ -473,17 +463,8 @@ associative array, depending on the $resflag setting.
 With the $no_exit flag you can selectively instruct the class NOT to exit
 in case of an error (set to 1), even if your master define DB_ERRORMODE has
 a different setting.
-This method returns the result of the call as array whenever one of the
-following SQL Commands is detected:
-
-SELECT
-SHOW
-EXPLAIN
-DESCRIBE
-OPTIMIZE
-ANALYZE
-CHECK
-
+This method returns the result of the call as array whenever the mysql_query()
+method returns a non-boolean value.
 For all other commands only the numeric value of the call result is returned.
 Please remember that associative arrays are case-sensitive, you have to
 specify the array index name exactly as specified inside the query!
@@ -636,16 +617,20 @@ this connection is used and of course not terminated.
 
 
 
-5. REPLACE "db_MySQL" with "db_MySQLi"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### 5. REPLACE "db_MySQL" with "db_MySQLi"
+
 If you have used my other MySQL class db_MySQL, you can simply replace that
 old class with this db_MySQLi class by changing the constructor from:
 
+```php
 $db = new db_MySQL;
+```
 
 to
 
+```php
 $db = new db_MySQLi;
+```
 
 If you have used the db_MySQL class constants in your code, you should
 either set the configuration define "MYSQLDB_COMPATIBLE_MODE" to TRUE or
@@ -658,8 +643,8 @@ class prefix, so use i.e. db_MySQLi::DBOF_SHOW_NO_ERRORS.
 
 
 
-6. FINAL WORDS AND CONTACT ADDRESSES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+### 6. FINAL WORDS AND CONTACT ADDRESSES
+
 I'm using this class now in several projects and never encountered any
 problems. However we all know that no software is 100% bugfree, so if you
 have found a bug or have suggestions or feature requests feel free to contact

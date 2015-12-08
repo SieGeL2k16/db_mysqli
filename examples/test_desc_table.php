@@ -6,12 +6,9 @@
  * take the first shown table and calls the method "DescTable()" with the found
  * tablename. Afterwards this table structure is dumped on screen.
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQLi
- * @subpackage Examples
- * @version 0.11 (24-Aug-2014)
- * $Id: test_desc_table.php 26 2014-08-24 22:44:53Z siegel $
+ * @package db_MySQLi\Examples
+ * @version 0.2.0 (07-Dec-2015)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
- * @filesource
  */
 /**
  */
