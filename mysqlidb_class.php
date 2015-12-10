@@ -586,20 +586,45 @@ class db_MySQLi
    *  - MYSQLI_NUM   = Data is returned as numbered array
    * @return array One row of the resulting query or NULL if there are no data anymore
    */
-	public function FetchResult($result,$resflag = MYSQLI_ASSOC)
+	public function FetchResult($result,$resflag = MYSQLI_ASSOC,&$bindparams=null)
     {
     if(!$result)
       {
       return($this->Print_Error('FetchResult(): No valid result handle!'));
       }
     $start = $this->getmicrotime();
-    $resar = mysqli_fetch_array($result,$resflag);
+    if(!($result instanceof mysqli_stmt))
+      {
+      $resar = mysqli_fetch_array($result,$resflag);
+      $this->querytime+= ($this->getmicrotime() - $start);
+      return($resar);
+      }
+    $rc = mysqli_stmt_fetch($result);   // We fetch here only one row!
+    if($rc === TRUE)
+      {
+      if(is_null($bindparams) === FALSE)
+        {
+        $row  = array();
+        foreach($bindparams as $k=>$v)
+          {
+          $row[$k] = $v;
+          }
+        }
+      else
+        {
+        $row = $rc;
+        }
+      }
+    else
+      {
+      $row = $rc;
+      }
     $this->querytime+= ($this->getmicrotime() - $start);
-    return($resar);
+    return($row);
     } // FetchResult()
 
   /**
-   * Frees result returned by QueryResult().
+   * Frees result returned by QueryResult() and Prepare().
    * It is a good programming practise to give back what you have taken, so after processing
    * your Multi-Row query with FetchResult() finally call this function to free the allocated
    * memory.
@@ -620,7 +645,14 @@ class db_MySQLi
       }
     else
       {
-      $myres = @mysqli_free_result($result);
+      if($result instanceof mysqli_stmt)
+        {
+        $myres = mysqli_stmt_close($result);
+        }
+      else
+        {
+        $myres = mysqli_free_result($result);
+        }
       }
     $this->querytime+= ($this->getmicrotime() - $start);
     return($myres);
@@ -1392,6 +1424,87 @@ class db_MySQLi
     } // GetPConnect()
 
   /**
+   * Prepares a SQL statement so that the variables can be bound afterwards.
+   * Returns the statement handle or FALSE in case of an error.
+   * @param string $sql The Query to prepare
+   * @return mixed Either the valid statement handle or FALSE in case of an error.
+   * @since 0.2.0
+   */
+  public function Prepare($sql)
+    {
+    $stmt = mysqli_stmt_init($this->sock);
+    if(mysqli_stmt_prepare($stmt,$sql) === FALSE)
+      {
+      return(FALSE);
+      }
+    return($stmt);
+    }
+
+  /**
+   * Executes an prepared statement and optionally bind variables for bindvar-enabled queries.
+   * See examples/test_bind_vars.php for a working example.
+   * @param mysqli_stmt $stmt The statement handle as returned by Prepare()
+   * @param integer $no_exit Decides how the class should react on errors. If you set this to 1 the class won't automatically exit on an error but instead return the mysqli_errno value.
+   * @param array $bindvars Associative array with variables to bind via mysqli_stmt_bind_param().
+   * @since 0.2.0
+   */
+  public function Execute($stmt,$no_exit = 0, &$bindvars=null)
+    {
+    if(is_null($bindvars) === FALSE)
+      {
+      $args = array($stmt,'');
+      $alist= array();
+      for($b = 0; $b < count($bindvars); $b++)
+        {
+        $args[1] .= $bindvars[$b]['TYPE'];
+        $args[]   = &$bindvars[$b]['VAL'];    // mysqli_stmt_bind_param() requires references!
+        }
+      if(call_user_func_array('mysqli_stmt_bind_param', $args) === FALSE)
+        {
+        if($no_exit)
+          {
+          $reterror = @mysqli_errno($this->sock);
+          return($reterror);
+          }
+        else
+          {
+          return($this->Print_Error('QueryHash(): mysqli_stmt_bind_param() failed!'));
+          }
+        }
+      }
+    if(@mysqli_stmt_execute($stmt) === FALSE)
+      {
+      if($no_exit)
+        {
+        $reterror = @mysqli_errno($this->sock);
+        return($reterror);
+        }
+      else
+        {
+        return($this->Print_Error('Execute(): mysqli_stmt_execute() failed!'));
+        }
+      }
+    // Check if we have a result set returned, in this case prepare for fetching
+    $metadata = @mysqli_stmt_result_metadata($stmt);
+    if($metadata !== FALSE)
+      {
+      if(@mysqli_stmt_store_result($stmt) == FALSE)
+        {
+        if($no_exit)
+          {
+          $reterror = @mysqli_errno($this->sock);
+          return($reterror);
+          }
+        else
+          {
+          return($this->Print_Error('QueryHash(): mysqli_stmt_store_result() failure!'));
+          }
+        }
+      }
+    return($metadata);
+    } //-- Execute()
+
+ /**
    * Single query method with Bind var support.
    * Resflag can be "MYSQLI_NUM" or "MYSQLI_ASSOC" depending on what kind of array you want to be returned.
    * @param string $querystring The SQL query to send to database.
@@ -1399,13 +1512,10 @@ class db_MySQLi
    *  - MYSQLI_ASSOC = Data is returned as assoziative array
    *  - MYSQLI_NUM   = Data is returned as numbered array
    *  - MYSQLI_BOTH  = Data is returned as both numbered and associative array.
-   * @param integer $no_exit Decides how the class should react on errors.
-   *                         If you set this to 1 the class won't automatically exit
-   *                         on an error but instead return the mysqli_errno value.
-   *                         Default of 0 means that the class calls Print_Error()
-   *                         and exists.
+   * @param integer $no_exit Decides how the class should react on errors. If you set this to 1 the class won't automatically exit on an error but instead return the mysqli_errno value.
    * @param array &$bindvars The array with bind vars for the given statement.
    * @return mixed Either an array as result of the query or an error code or TRUE.
+   * @since 0.2.0
    */
   public function QueryHash($querystring, $resflag = MYSQLI_ASSOC, $no_exit = 0, &$bindvars=null)
     {
@@ -1429,71 +1539,26 @@ class db_MySQLi
       {
       return($this->Query($querystring,$resflag,$no_exit));
       }
-    // Initialize the statement handle to get proper error codes from mysqli_stmt_prepare()
-    $stmt = mysqli_stmt_init($this->sock);
-    if(mysqli_stmt_prepare($stmt,$querystring) === FALSE)
+    $stmt   = $this->Prepare($querystring);
+    $result = $this->Execute($stmt,$no_exit,$bindvars);
+    if($result == true)
       {
-      return($this->Print_Error('QueryHash(): Prepare Statement failure!'));
-      }
-    $args = array($stmt,'');
-    $alist= array();
-    for($b = 0; $b < count($bindvars); $b++)
-      {
-      $args[1] .= $bindvars[$b]['TYPE'];
-      $args[]   = &$bindvars[$b]['VAL'];    // mysqli_stmt_bind_param() requires references!
-      }
-    if(call_user_func_array('mysqli_stmt_bind_param', $args) === FALSE)
-      {
-      return($this->Print_Error('QueryHash(): call_user_func_array() failed!'));
-      }
-    if(mysqli_stmt_execute($stmt) === FALSE)
-      {
-      if($no_exit)
-        {
-        $reterror = @mysqli_errno($this->sock);
-        return($reterror);
-        }
-      else
-        {
-        return($this->Print_Error('QueryHash(): Execute failed!'));
-        }
-      }
-    // Check if we have a result set returned, in this case return only the first row!
-    $metadata = mysqli_stmt_result_metadata($stmt);
-    if($metadata !== FALSE)
-      {
-      if(mysqli_stmt_store_result($stmt) == FALSE)
-        {
-        return($this->Print_Error('QueryHash(): mysqli_stmt_store_result() failure!'));
-        }
       // Code below taken from http://php.net/manual/en/mysqli-stmt.bind-result.php#102179 and slightly modified - Thank you!
       $vars = array($stmt);
       $data = array();
-      $row  = array();
-      while($field = mysqli_fetch_field($metadata))
+      while($field = mysqli_fetch_field($result))
         {
         $vars[] = &$data[$field->name]; // pass by reference
         }
       call_user_func_array('mysqli_stmt_bind_result', $vars);
-      $rc = mysqli_stmt_fetch($stmt);   // We fetch here only one row!
-      if($rc === TRUE)
-        {
-        foreach($data as $k=>$v)
-          {
-          $row[$k] = $v;
-          }
-        }
-      else
-        {
-        $row = null;
-        }
-      mysqli_free_result($metadata);
+      $row = $this->FetchResult($stmt,$resflag,$data);
+      $this->FreeResult($result);
       }
     else  // No result set found, so just return TRUE
       {
       $row = TRUE;
       }
-    mysqli_stmt_close($stmt);
+    $this->FreeResult($stmt);
     return($row);
     } // QueryHash()
 

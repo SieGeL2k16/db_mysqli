@@ -52,4 +52,12 @@ function DBFooter($lf, &$dbh)
   {
   printf("%sQueries: %d | Time required: %5.3fs%s",$lf,$dbh->GetQueryCount(),$dbh->GetQueryTime(),$lf);
   }
-?>
+
+/**
+ * Prints out aligned text
+ */
+function PrintCon($maxlen,$fstr)
+  {
+  printf("%s%s: ",$fstr,str_repeat(".",$maxlen-strlen($fstr)-2));
+  flush();
+  }

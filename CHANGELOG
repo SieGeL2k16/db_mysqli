@@ -2,7 +2,17 @@ APPLICATION=db_MySQLi Class
 
 V0.2.0:
 
-07-Dec-2015 - Added Bindvar support, currently only QueryHash method is implemented.
+10-Dec-2015 - Added new example test_bind_vars.php which tests the new methods
+              related to binding params and result sets including a small benchmark
+              to compare bind-vars vs. static queries
+
+            - Added new methods:
+              * Prepare()
+              * Execute()
+
+            - Rewritten QueryHash() to utilize Prepare() and Execute() methods.
+
+07-Dec-2015 - Added Bindvar support, currently only QueryHash() method is implemented.
 
             - Reworked all examples and documentation
 
@@ -27,16 +37,16 @@ V0.1.1:
 
 24-Aug-2014 - Added all examples from MySQL() class, also added new tests.
 
-            - Added new methods():
+            - Added new methods:
               * Set_CharSet()
               * Get_CharSet()
               * EnableCompatibleMode()
-							* DescTable()
-							* GetErrorHandling()
-							* AffectedRows()
-							* NumRows()
-							* PerformNewInsert()
-							* SetPConnect()
+              * DescTable()
+              * GetErrorHandling()
+              * AffectedRows()
+              * NumRows()
+              * PerformNewInsert()
+              * SetPConnect()
 
             - Changed constructor method, now it is defined as __construct(),
               also changed all class variables and constants.
