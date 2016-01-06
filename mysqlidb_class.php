@@ -1468,7 +1468,7 @@ class db_MySQLi
           }
         else
           {
-          return($this->Print_Error('QueryHash(): mysqli_stmt_bind_param() failed!'));
+          return($this->Print_Error('Execute(): mysqli_stmt_bind_param() failed!'));
           }
         }
       }
@@ -1497,7 +1497,7 @@ class db_MySQLi
           }
         else
           {
-          return($this->Print_Error('QueryHash(): mysqli_stmt_store_result() failure!'));
+          return($this->Print_Error('Execute(): mysqli_stmt_store_result() failure!'));
           }
         }
       }
@@ -1521,7 +1521,7 @@ class db_MySQLi
     {
     if(!$this->sock)
       {
-      return($this->Print_Error('QueryHash(): No active Connection!',$querystring));
+      return($this->Print_Error('QueryHash(): No active Connection!'));
       }
     if($querystring == '')
       {
@@ -1540,6 +1540,18 @@ class db_MySQLi
       return($this->Query($querystring,$resflag,$no_exit));
       }
     $stmt   = $this->Prepare($querystring);
+    if($stmt === FALSE)
+      {
+      if(!$no_exit)
+        {
+        return($this->Print_Error('QueryHash(): Prepare() failed!'));
+        }
+      else
+        {
+        $this->myErrStr = 'Prepare() failure - Check SQL!';
+        return(-1);  // Return an error code
+        }
+      }
     $result = $this->Execute($stmt,$no_exit,$bindvars);
     if($result == true)
       {
