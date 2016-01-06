@@ -1456,8 +1456,8 @@ class db_MySQLi
       $alist= array();
       for($b = 0; $b < count($bindvars); $b++)
         {
-        $args[1] .= $bindvars[$b]['TYPE'];
-        $args[]   = &$bindvars[$b]['VAL'];    // mysqli_stmt_bind_param() requires references!
+        $args[1] .= $bindvars[$b][1];
+        $args[]   = &$bindvars[$b][0];    // mysqli_stmt_bind_param() requires references!
         }
       if(call_user_func_array('mysqli_stmt_bind_param', $args) === FALSE)
         {

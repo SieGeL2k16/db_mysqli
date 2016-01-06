@@ -41,7 +41,7 @@ $ddlquery[1]="DROP TABLE MYSQLI_DB_TEST_BINDVARS";
  * Now create first the table - This will fail if given table already exists
  ******************************************************************************/
 PrintCon(60,"Creating test table MYSQLI_DB_TEST_BINDVARS");
-$rc = $db->Query($ddlquery[0],MYSQL_ASSOC,1);
+$rc = $db->Query($ddlquery[0],MYSQLI_ASSOC,1);
 if(is_bool($rc) == FALSE)
   {
   $error = $db->GetErrorText();
@@ -58,7 +58,7 @@ $start = microtime(true);
 for($i = 0; $i < ROWS_TO_CREATE; $i++)
   {
   $SQL  = sprintf("INSERT INTO MYSQLI_DB_TEST_BINDVARS VALUES(%d,'%s')",$i,$db->EscapeString('MANUAL_'.$i));
-  $rc = $db->Query($SQL,MYSQL_ASSOC,1);
+  $rc = $db->Query($SQL,MYSQLI_ASSOC,1);
   }
 printf("finished in %5.3fs\n\n",(microtime(true) - $start));
 
@@ -74,7 +74,7 @@ $stmt = $db->Prepare($SQL);
 $data = array();
 for($i = 0; $i < ROWS_TO_CREATE; $i++)
   {
-  $data = array(['VAL' => $i, 'TYPE' => db_MySQLi::DBOF_TYPE_INT], ['VAL' => 'MANUAL_'.$i, 'TYPE' => db_MySQLi::DBOF_TYPE_STRING]);
+  $data = array([$i,db_MySQLi::DBOF_TYPE_INT], ['MANUAL_'.$i,db_MySQLi::DBOF_TYPE_STRING]);
   $rc = $db->Execute($stmt,0,$data);
   }
 $db->FreeResult($stmt);
@@ -91,8 +91,8 @@ for($i = 0; $i < MAX_ITERATIONS; $i++)
   $ID = mt_rand(0,(ROWS_TO_CREATE) -1);
 
   // Now fetch first a row with bind variables
-  $sp   = array(['VAL' => $ID, 'TYPE' => db_MySQLi::DBOF_TYPE_INT]);
-  $rc = $db->QueryHash($SQL,MYSQL_ASSOC,0,$sp);
+  $sp   = array([$ID,db_MySQLi::DBOF_TYPE_INT]);
+  $rc = $db->QueryHash($SQL,MYSQLI_ASSOC,0,$sp);
   }
 printf("finished in %5.3fs (%5d = %s)\n\n",(microtime(true)-$start),$rc['ID'],$rc['NAME']);flush();
 
@@ -107,7 +107,7 @@ $stmt   = $db->Prepare($SQL);
 for($i = 0; $i < MAX_ITERATIONS; $i++)
   {
   $ID = mt_rand(0,(ROWS_TO_CREATE) -1);
-  $sp   = array(['VAL' => $ID, 'TYPE' => db_MySQLi::DBOF_TYPE_INT]);
+  $sp   = array([$ID,db_MySQLi::DBOF_TYPE_INT]);
   $db->Execute($stmt,0,$sp);
   mysqli_stmt_bind_result($stmt,$dataid,$data);
   $db->FetchResult($stmt);

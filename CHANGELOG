@@ -2,6 +2,14 @@ APPLICATION=db_MySQLi Class
 
 V0.2.0:
 
+06-Jan-2015 - Changed format of bind vars, now you just have to pass in the
+              following format:
+                                [<VAL>,<TYPE>]
+
+              <VAL>   => The value to add
+              <TYPE>  => Variable type, see DBOF_TYPE_* types or
+                         look in the php.net manual.
+
 10-Dec-2015 - Added new example test_bind_vars.php which tests the new methods
               related to binding params and result sets including a small benchmark
               to compare bind-vars vs. static queries
