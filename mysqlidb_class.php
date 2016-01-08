@@ -115,6 +115,9 @@ class db_MySQLi
   const DBOF_TYPE_STRING    = 's';
   const DBOF_TYPE_BLOB      = 'b';
 
+  /** Define to detect prepare() errors */
+  const PREPARE_ERROR = 'Prepare() failure - Check SQL!';
+
   /**
    * Constructor of class.
    * The constructor takes default values from dbdefs.inc.php.
@@ -1033,7 +1036,12 @@ class db_MySQLi
         }
       else
         {
-        return(@mysqli_errno($this->sock));
+        $merr = @mysqli_errno($this->sock);
+        if($merr == 0)
+          {
+          $merr = $this->myErrno;
+          }
+        return($merr);
         }
       }
     else
@@ -1044,7 +1052,12 @@ class db_MySQLi
         }
       else
         {
-        return(@mysqli_errno($other_sock));
+        $merr = @mysqli_errno($other_sock);
+        if($merr == 0)
+          {
+          $merr = $this->myErrno;
+          }
+        return($merr);
         }
       }
     } // GetErrno()
@@ -1065,7 +1078,12 @@ class db_MySQLi
         }
       else
         {
-        return(@mysqli_error($this->sock));
+        $merr = @mysqli_error($this->sock);
+        if($merr == "")
+          {
+          $merr = $this->myErrStr;
+          }
+        return($merr);
         }
       }
     else
@@ -1076,7 +1094,12 @@ class db_MySQLi
         }
       else
         {
-        return(@mysqli_error($other_sock));
+        $merr = @mysqli_error($other_sock);
+        if($merr == "")
+          {
+          $merr = $this->myErrStr;
+          }
+        return($merr);
         }
       }
     } // GetErrorText()
@@ -1435,6 +1458,8 @@ class db_MySQLi
     $stmt = mysqli_stmt_init($this->sock);
     if(mysqli_stmt_prepare($stmt,$sql) === FALSE)
       {
+      $this->MyErrno  = mysqli_stmt_errno($stmt);
+      $this->myErrStr = mysqli_stmt_error($stmt);
       return(FALSE);
       }
     return($stmt);
@@ -1544,11 +1569,10 @@ class db_MySQLi
       {
       if(!$no_exit)
         {
-        return($this->Print_Error('QueryHash(): Prepare() failed!'));
+        return($this->Print_Error(sprintf('QueryHash(): Prepare() failed: %s!',$this->myErrStr)));
         }
       else
         {
-        $this->myErrStr = 'Prepare() failure - Check SQL!';
         return(-1);  // Return an error code
         }
       }

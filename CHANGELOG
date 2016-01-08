@@ -2,6 +2,11 @@ APPLICATION=db_MySQLi Class
 
 V0.2.0:
 
+08-Jan-2015 - Made GetErrorText() & GetErrno() aware of Statement errors:
+              if Prepare() failed the internal class error variables are set
+              and utilized in both GetErr*() methods.
+
+
 06-Jan-2015 - Changed format of bind vars, now you just have to pass in the
               following format:
                                 [<VAL>,<TYPE>]
