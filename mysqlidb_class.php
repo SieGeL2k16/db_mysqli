@@ -115,9 +115,6 @@ class db_MySQLi
   const DBOF_TYPE_STRING    = 's';
   const DBOF_TYPE_BLOB      = 'b';
 
-  /** Define to detect prepare() errors */
-  const PREPARE_ERROR = 'Prepare() failure - Check SQL!';
-
   /**
    * Constructor of class.
    * The constructor takes default values from dbdefs.inc.php.
