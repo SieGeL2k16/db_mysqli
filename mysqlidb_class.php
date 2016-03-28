@@ -6,7 +6,7 @@
  * See docs/ for a complete overview of all methods.
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 0.2.0 (07-Dec-2015)
+ * @version 0.2.1 (07-Mar-2016)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -17,7 +17,7 @@
 class db_MySQLi
   {
  /** Class version. */
-  private $classversion = '0.2.0';
+  private $classversion = '0.2.1';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -586,38 +586,50 @@ class db_MySQLi
    *  - MYSQLI_NUM   = Data is returned as numbered array
    * @return array One row of the resulting query or NULL if there are no data anymore
    */
-	public function FetchResult($result,$resflag = MYSQLI_ASSOC,&$bindparams=null)
+  public function FetchResult($result,$resflag = MYSQLI_ASSOC)
     {
     if(!$result)
       {
       return($this->Print_Error('FetchResult(): No valid result handle!'));
       }
     $start = $this->getmicrotime();
-    if(!($result instanceof mysqli_stmt))
+    $res   = @mysqli_stmt_result_metadata($result);
+    if(is_null($res) === TRUE)
       {
       $resar = mysqli_fetch_array($result,$resflag);
       $this->querytime+= ($this->getmicrotime() - $start);
       return($resar);
       }
-    $rc = mysqli_stmt_fetch($result);   // We fetch here only one row!
-    if($rc === TRUE)
-      {
-      if(is_null($bindparams) === FALSE)
-        {
-        $row  = array();
-        foreach($bindparams as $k=>$v)
-          {
-          $row[$k] = $v;
-          }
-        }
-      else
-        {
-        $row = $rc;
-        }
-      }
     else
       {
-      $row = $rc;
+      // Check if we have a result set returned, in this case prepare for fetching
+      if($res != NULL)
+        {
+        mysqli_stmt_store_result($result);
+        // Code below taken from http://php.net/manual/en/mysqli-stmt.bind-result.php#102179 and slightly modified - Thank you!
+        $vars = array($result);
+        $data = array();
+        $retv = array();
+        while($field = mysqli_fetch_field($res))
+          {
+          $vars[] = &$data[$field->name]; // pass by reference
+          $retv[$field->name] = null;
+          }
+        call_user_func_array('mysqli_stmt_bind_result', $vars);
+        $retval = mysqli_stmt_fetch($result);
+        if(is_null($retval) === TRUE)
+          {
+          return(NULL);
+          }
+        $dummy  = array_slice($vars,1);
+        $cnt    = 0;
+        foreach($retv AS $k => $val)
+          {
+          $retv[$k] = $dummy[$cnt];
+          $cnt++;
+          }
+        $row = $retv;
+        }
       }
     $this->querytime+= ($this->getmicrotime() - $start);
     return($row);
@@ -639,7 +651,7 @@ class db_MySQLi
       {
       if(is_null($this->stmt)==false)
         {
-        $myres = @mysqli_free_result($this->$stmt);
+        $myres = @mysqli_free_result($this->stmt);
         }
       $this->stmt = NULL;
       }
@@ -1584,7 +1596,26 @@ class db_MySQLi
         $vars[] = &$data[$field->name]; // pass by reference
         }
       call_user_func_array('mysqli_stmt_bind_result', $vars);
-      $row = $this->FetchResult($stmt,$resflag,$data);
+      $rc = mysqli_stmt_fetch($stmt);   // We fetch here only one row!
+      if($rc === TRUE)
+        {
+        if(is_null($data) === FALSE)
+          {
+          $row  = array();
+          foreach($data as $k=>$v)
+            {
+            $row[$k] = $v;
+            }
+          }
+        else
+          {
+          $row = $rc;
+          }
+        }
+      else
+        {
+        $row = $rc;
+        }
       $this->FreeResult($result);
       }
     else  // No result set found, so just return TRUE
@@ -1595,4 +1626,89 @@ class db_MySQLi
     return($row);
     } // QueryHash()
 
+  /**
+   * Multirow query method with Bind var support.
+   * Resflag can be "MYSQLI_NUM" or "MYSQLI_ASSOC" depending on what kind of array you want to be returned.
+   * @param string $querystring The SQL query to send to database.
+   * @param integer $resflag Decides how the result should be returned:
+   *  - MYSQLI_ASSOC = Data is returned as assoziative array
+   *  - MYSQLI_NUM   = Data is returned as numbered array
+   *  - MYSQLI_BOTH  = Data is returned as both numbered and associative array.
+   * @param integer $no_exit Decides how the class should react on errors. If you set this to 1 the class won't automatically exit on an error but instead return the mysqli_errno value.
+   * @param array &$bindvars The array with bind vars for the given statement.
+   * @return mixed Either an array as result of the query or an error code or TRUE.
+   * @since 0.2.1
+   */
+  public function QueryResultHash($querystring,$no_exit = 0, &$bindvars=null)
+    {
+    if(!$this->sock)
+      {
+      return($this->Print_Error('QueryResultHash(): No active Connection!'));
+      }
+    if($querystring == '')
+      {
+      return($this->Print_Error('QueryResultHash(): No querystring was supplied!'));
+      }
+    $this->PrintDebug($querystring);
+    $this->currentQuery = $querystring;
+    if($this->showError == db_MySQLi::DBOF_RETURN_ALL_ERRORS)
+      {
+      $no_exit = 1;  // Override if user has set master define
+      }
+    $start = $this->getmicrotime();
+    // If we are called without bind vars, we use the existing Query() function
+    if(is_null($bindvars) === TRUE)
+      {
+      return($this->QueryResult($querystring,$no_exit));
+      }
+    $stmt = $this->Prepare($querystring);
+    if($stmt === FALSE)
+      {
+      if(!$no_exit)
+        {
+        return($this->Print_Error(sprintf('QueryResultHash(): Prepare() failed: %s!',$this->myErrStr)));
+        }
+      else
+        {
+        return(-1);  // Return an error code
+        }
+      }
+    if(is_null($bindvars) === FALSE)
+      {
+      $args = array($stmt,'');
+      $alist= array();
+      for($b = 0; $b < count($bindvars); $b++)
+        {
+        $args[1] .= $bindvars[$b][1];
+        $args[]   = &$bindvars[$b][0];    // mysqli_stmt_bind_param() requires references!
+        }
+      if(call_user_func_array('mysqli_stmt_bind_param', $args) === FALSE)
+        {
+        if($no_exit)
+          {
+          $reterror = @mysqli_errno($this->sock);
+          return($reterror);
+          }
+        else
+          {
+          return($this->Print_Error('QueryHash(): mysqli_stmt_bind_param() failed!'));
+          }
+        }
+      }
+    if(mysqli_stmt_execute($stmt) === FALSE)
+      {
+      if($no_exit)
+        {
+        $reterror = @mysqli_errno($this->sock);
+        return($reterror);
+        }
+      else
+        {
+        return($this->Print_Error('QueryHash(): mysqli_stmt_execute() failed!'));
+        }
+      }
+    return($stmt);
+    } // QueryResultHash()
+
   } // db_MySQLi()
+

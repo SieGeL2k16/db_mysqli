@@ -1,5 +1,24 @@
 APPLICATION=db_MySQLi Class
 
+v0.2.1:
+
+28-Mar-2016 - Changed example "test_queryresulthash.php" to auto-create the
+              test table "MYSQLI_DB_TEST_QUERIES", populate it with data
+              and drop it automatically at the end of the test.
+
+07-Mar-2016 - Added new method:
+
+              * QueryResultHash()
+
+              This method allows to use bind vars when fetching resultset
+              data from MySQL. The FetchResult() method was enhanced to have
+              a single fetch method for both QueryResult() and QueryResultHash()
+
+            - Added new example "test_queryresulthash.php" to demonstrate
+              the usage of the new method.
+
+            - Fixed the example "test_bind_vars.php".
+
 V0.2.0:
 
 08-Jan-2015 - Made GetErrorText() & GetErrno() aware of Statement errors:

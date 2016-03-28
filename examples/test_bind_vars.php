@@ -4,7 +4,7 @@
  * Examples how to use bind variables with the Query methods "QueryHash()" and "QueryResultHash()".
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
  * @package db_MySQLi\Examples
- * @version 0.2.0 (07-Dec-2015)
+ * @version 0.2.1 (07-Mar-2016)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 /**
@@ -109,11 +109,10 @@ for($i = 0; $i < MAX_ITERATIONS; $i++)
   $ID = mt_rand(0,(ROWS_TO_CREATE) -1);
   $sp   = array([$ID,db_MySQLi::DBOF_TYPE_INT]);
   $db->Execute($stmt,0,$sp);
-  mysqli_stmt_bind_result($stmt,$dataid,$data);
-  $db->FetchResult($stmt);
+  $row = $db->FetchResult($stmt);
   }
 $db->FreeResult($stmt);
-printf("finished in %5.3fs (%5d = %s)\n\n",(microtime(true)-$start),$dataid,$data);flush();
+printf("finished in %5.3fs (%5d = %s)\n\n",(microtime(true)-$start),$row['ID'],$row['NAME']);flush();
 
 /******************************************************************************
  * Now call Query() multiple times and measure time
@@ -139,7 +138,7 @@ while($d = $db->FetchResult($res))
   $cnt++;
   }
 $db->FreeResult($res);
-printf(" finished in %5.3fs (%d rows)\n\n",(microtime(true)-$start),$cnt);
+printf("finished in %5.3fs (%d rows)\n\n",(microtime(true)-$start),$cnt);
 
 /******************************************************************************
  * Read out all rows using Prepare/Execute()
@@ -155,7 +154,7 @@ while($d = $db->FetchResult($stmt))
   $cnt++;
   }
 $db->FreeResult($stmt);
-printf(" finished in %5.3fs (%d rows)\n\n",(microtime(true)-$start),$cnt);
+printf("finished in %5.3fs (%d rows)\n\n",(microtime(true)-$start),$cnt);
 
 /******************************************************************************
  * Finally drop the table

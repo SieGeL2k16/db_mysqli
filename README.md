@@ -1,7 +1,7 @@
 Documentation for db_MySQLi class written by Sascha 'SieGeL' Pfalz
 ==================================================================
 
-Last updated on 08-Dec-2015
+Last updated on 07-Mar-2016
 ---------------------------
 
 
@@ -21,9 +21,9 @@ are now part of this class.
 
 To use this class you have to met the following requirements:
 
-- PHP 5.x with enabled "mysqli" extension. Tested with 5.6.4.
+- PHP 5.x or 7.x with enabled "mysqli" extension. Tested with 5.6.18 and 7.0.4
 
-- MySQL Database, version should not matter. Tested with 5.x
+- MySQL Database 4.x or newer. Tested with MySQL 5.6.29, 5.7.11 and MariaDB 5.5
 
 
 ## 3. INSTALLATION AND USAGE
@@ -604,6 +604,89 @@ this function this method connects itself to the database, retrieve the
 version string and disconnects afterwards. If an active connection exists
 this connection is used and of course not terminated.
 
+
+### `QueryHash($SQL, $resflag = MYSQLI_ASSOC, $no_exit = 0, &$bindvars=null)`
+
+A single query function with bind variable support.
+To avoid SQL injections and other possible hacking attempts against your
+database you should consider using ONLY (!) bind vars for new applications.
+Bind vars are a safe way to pass data from/to your MySQL server, the SQL
+itself contains only placeholders and the data itself will be "bind" afterwards.
+
+An example:
+
+```
+INSERT INTO foo(field1,field2) VALUES(?,?)
+```
+
+As you can see the values for field1 and field2 are not directly written to
+the SQL statement but will be added later with bind_param calls. This way
+no SQL injection can happen, as all data is added separately. Also this
+has the nice effect that the SQL statement can be cached, because it won't
+change anymore during runtime.
+This class supports bind vars in both directions, so you can use bind vars
+to INSERT/UPDATE/DELETE/MERGE and also use bind vars inside a WHERE clause
+for SELECT statements.
+
+The bind vars are passed as an associative array with value/type pairs.
+
+If you want to insert for the example SQL above the following values:
+
+field1 => 1 (integer)
+field2 => 'TEST' (string)
+
+You have to define the following array for the bindvars parameter of QueryHash():
+
+$bindvars = array([1,'i'],['TEST','s']);
+
+'i' and 's' are type definitions of the passed variables, MySQL defines the
+following types:
+
+'i' => Integer
+'s' => String
+'d' => Double
+'b' => Blob
+
+The class defines four constants for these values:
+
+db_MySQLi::DBOF_TYPE_INT;
+db_MySQLi::DBOF_TYPE_DOUBLE;
+db_MySQLi::DBOF_TYPE_STRING;
+db_MySQLi::DBOF_TYPE_BLOB;
+
+See _examples/test_bind_vars.php_ for an example how to use it.
+
+
+### `QueryResultHash($SQL,$no_exit =0, &$bindvars=null)`
+
+Same functionality as QueryResult() but also supports bind variables.
+See QueryHash() for explanation how to use these bind variables.
+
+See _examples/test_bind_vars.php_ and _examples/test_queryresulthash.php_
+for examples how to use this method.
+
+
+## `Prepare($SQL)`
+
+"Prepares" an SQL statement for binding of variables. You must call
+this method if you want to manually bind and execute your SQL.
+Returns TRUE if all was OK else FALSE and internal error variables
+are filled.
+
+See _examples/test_bind_vars.php_ for an example how to use it.
+
+
+## `Execute($stmt,$no_exit = 0, &$bindvars=null)`
+
+Executes an already prepared statement with optional bind variables.
+If bindvars are given, they are bind first before the statement itself
+is executed.
+Returns either a result set ready for use with "FetchResult()" or FALSE
+if no result set exists (INSERT etc. doesn't return a resultset).
+Returns an integer in case of an error and automatic error reporting is
+disabled.
+
+See _examples/test_bind_vars.php_ for an example how to use it.
 
 
 ## 5. REPLACE "db_MySQL" with "db_MySQLi"
