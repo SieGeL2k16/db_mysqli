@@ -1,5 +1,23 @@
 APPLICATION=db_MySQLi Class
 
+v0.2.3:
+
+14-Sep-2016 - Fixed Return code of QueryHash() in case of an error.
+              If an integer error is returned from Execute() we pass
+              this back, else we just return TRUE.
+              Also enhanced error handling in Execute(), QueryHash()
+              and QueryResultHash() to always return correct error message.
+
+            - QueryHash() now also checks if return value from Execute()
+              is an instance of mysqli_result instead of checking for
+              boolean value.
+
+v0.2.2:
+
+12-Apr-2016 - Fixed exception in FetchResult() if wrong type of variable
+              is given to mysqli_stmt_result_metadata(). Now the type is
+              checked before calling this function.
+
 v0.2.1:
 
 28-Mar-2016 - Changed example "test_queryresulthash.php" to auto-create the

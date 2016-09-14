@@ -6,7 +6,7 @@
  * See docs/ for a complete overview of all methods.
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 0.2.1 (07-Mar-2016)
+ * @version 0.2.3 (14-Sep-2016)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -17,7 +17,7 @@
 class db_MySQLi
   {
  /** Class version. */
-  private $classversion = '0.2.1';
+  private $classversion = '0.2.3';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -592,8 +592,12 @@ class db_MySQLi
       {
       return($this->Print_Error('FetchResult(): No valid result handle!'));
       }
-    $start = $this->getmicrotime();
-    $res   = @mysqli_stmt_result_metadata($result);
+    $start  = $this->getmicrotime();
+    $res    = NULL;
+    if($result instanceof mysqli_stmt)
+      {
+      $res = @mysqli_stmt_result_metadata($result);
+      }
     if(is_null($res) === TRUE)
       {
       $resar = mysqli_fetch_array($result,$resflag);
@@ -1467,7 +1471,7 @@ class db_MySQLi
     $stmt = mysqli_stmt_init($this->sock);
     if(mysqli_stmt_prepare($stmt,$sql) === FALSE)
       {
-      $this->MyErrno  = mysqli_stmt_errno($stmt);
+      $this->myErrno  = mysqli_stmt_errno($stmt);
       $this->myErrStr = mysqli_stmt_error($stmt);
       return(FALSE);
       }
@@ -1497,8 +1501,9 @@ class db_MySQLi
         {
         if($no_exit)
           {
-          $reterror = @mysqli_errno($this->sock);
-          return($reterror);
+          $this->myErrno  = @mysqli_errno($this->sock);
+          $this->myErrStr = @mysqli_error($this->sock);
+          return($this->myErrno);
           }
         else
           {
@@ -1510,8 +1515,9 @@ class db_MySQLi
       {
       if($no_exit)
         {
-        $reterror = @mysqli_errno($this->sock);
-        return($reterror);
+        $this->myErrno  = @mysqli_errno($this->sock);
+        $this->myErrStr = @mysqli_error($this->sock);
+        return($this->myErrno);
         }
       else
         {
@@ -1526,8 +1532,9 @@ class db_MySQLi
         {
         if($no_exit)
           {
-          $reterror = @mysqli_errno($this->sock);
-          return($reterror);
+          $this->myErrno  = @mysqli_errno($this->sock);
+          $this->myErrStr = @mysqli_error($this->sock);
+          return($this->myErrno);
           }
         else
           {
@@ -1586,7 +1593,7 @@ class db_MySQLi
         }
       }
     $result = $this->Execute($stmt,$no_exit,$bindvars);
-    if($result == true)
+    if($result instanceof mysqli_result)
       {
       // Code below taken from http://php.net/manual/en/mysqli-stmt.bind-result.php#102179 and slightly modified - Thank you!
       $vars = array($stmt);
@@ -1618,9 +1625,16 @@ class db_MySQLi
         }
       $this->FreeResult($result);
       }
-    else  // No result set found, so just return TRUE
+    else  // No result set found, so just return TRUE (if boolean was returned, else we return the error code!)
       {
-      $row = TRUE;
+      if(is_bool($result) === TRUE)   // 0.2.3: Check type of return and react accordingly!
+        {
+        $row = TRUE;
+        }
+      else
+        {
+        $row = $result;
+        }
       }
     $this->FreeResult($stmt);
     return($row);
@@ -1686,8 +1700,9 @@ class db_MySQLi
         {
         if($no_exit)
           {
-          $reterror = @mysqli_errno($this->sock);
-          return($reterror);
+          $this->myErrno  = @mysqli_errno($this->sock);
+          $this->myErrStr = @mysqli_error($this->sock);
+          return($this->myErrno);
           }
         else
           {
@@ -1699,8 +1714,9 @@ class db_MySQLi
       {
       if($no_exit)
         {
-        $reterror = @mysqli_errno($this->sock);
-        return($reterror);
+        $this->myErrno  = @mysqli_errno($this->sock);
+        $this->myErrStr = @mysqli_error($this->sock);
+        return($this->myErrno);
         }
       else
         {
