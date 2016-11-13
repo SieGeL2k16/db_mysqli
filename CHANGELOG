@@ -2,6 +2,10 @@ APPLICATION=db_MySQLi Class
 
 v0.2.4:
 
+12-Nov-2016 - Renamed base class to db_mysqli.class.php. Required
+              as my own framework autoloads PHP classes by using
+              "classname.class.php" as searchpattern.
+
 18-Oct-2016 - Added default variable $row to FetchResult() to avoid
               PHP warnings
 
