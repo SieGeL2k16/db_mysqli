@@ -6,7 +6,7 @@
  * See docs/ for a complete overview of all methods.
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 0.2.3 (14-Sep-2016)
+ * @version 0.2.4 (18-Oct-2016)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -17,7 +17,7 @@
 class db_MySQLi
   {
  /** Class version. */
-  private $classversion = '0.2.3';
+  private $classversion = '0.2.4';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -588,6 +588,7 @@ class db_MySQLi
    */
   public function FetchResult($result,$resflag = MYSQLI_ASSOC)
     {
+    $row = NULL;
     if(!$result)
       {
       return($this->Print_Error('FetchResult(): No valid result handle!'));

@@ -1,5 +1,10 @@
 APPLICATION=db_MySQLi Class
 
+v0.2.4:
+
+18-Oct-2016 - Added default variable $row to FetchResult() to avoid
+              PHP warnings
+
 v0.2.3:
 
 14-Sep-2016 - Fixed Return code of QueryHash() in case of an error.
