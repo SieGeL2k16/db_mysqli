@@ -1,5 +1,14 @@
 APPLICATION=db_MySQLi Class
 
+v0.2.5:
+
+25-Jan-2017 - Public release as 0.2.5
+
+21-Jan-2017 - Documentation of class updated.
+
+              microtime() call redirected to microtime(true) instead
+              of using the legacy variant with list().
+
 v0.2.4:
 
 12-Nov-2016 - Renamed base class to db_mysqli.class.php. Required

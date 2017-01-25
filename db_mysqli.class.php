@@ -6,7 +6,7 @@
  * See docs/ for a complete overview of all methods.
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 0.2.4 (18-Oct-2016)
+ * @version 0.2.5 (21-Jan-2017)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -17,7 +17,7 @@
 class db_MySQLi
   {
  /** Class version. */
-  private $classversion = '0.2.4';
+  private $classversion = '0.2.5';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -120,6 +120,7 @@ class db_MySQLi
    * The constructor takes default values from dbdefs.inc.php.
    * Please see this file for further informations about the setable options.
    * @param string $extconfig Optional other filename for dbdefs.inc.php, defaults to "dbdefs.inc.php".
+   * @see dbdefs.inc.php
    */
   function __construct($extconfig='')
     {
@@ -157,7 +158,7 @@ class db_MySQLi
       }
 		else
 			{
-    	$this->AdminEmail	= (isset($_SERVER['SERVER_ADMIN'])) ? $_SERVER['SERVER_ADMIN'] : '';
+    	$this->AdminEmail	= (isset($_SERVER['SERVER_ADMIN'])) ? strip_tags($_SERVER['SERVER_ADMIN']) : '';
 			}
     // Check if user requested persistant connection per default in dbdefs.inc.php
     if(defined('MYSQLDB_USE_PCONNECT') && MYSQLDB_USE_PCONNECT != 0)
@@ -395,11 +396,11 @@ class db_MySQLi
       $crlf = "<br>\n";
       $space= '&nbsp;';
       echo("<br>\n<div align=\"left\" style=\"background-color: #EEEEEE; color:#000000;border: 1px solid #000000;\">\n");
-      echo("<font color=\"red\" face=\"Arial,Sans-Serif\"><b>".$this->appname.": Database Error occured!</b></font><br>\n<br>\n<code>\n");
+      echo("<font color=\"red\" face=\"Arial,Sans-Serif\"><b>".strip_tags($this->appname).": Database Error occured!</b></font><br>\n<br>\n<code>\n");
       }
     else
       {
-      echo("\n!!! ".$this->appname.": Database Error occured !!!\n\n");
+      echo("\n!!! ".strip_tags($this->appname).": Database Error occured !!!\n\n");
       }
     echo($space."CODE: ".$errnum.$crlf);
     echo($space."DESC: ".$errstr.$crlf);
@@ -447,7 +448,7 @@ class db_MySQLi
       echo("</code>\n");
       echo("</div>\n");
       echo("<div align=\"right\"><small>PHP ".phpversion()." / db_MySQLi class ".$this->classversion."</small></div>\n");
-    	@error_log($this->appname.': Error in '.$filename.': '.$ustr.' ('.chop(strip_tags($errstr)).')',0);
+    	@error_log(strip_tags($this->appname).': Error in '.$filename.': '.$ustr.' ('.chop(strip_tags($errstr)).')',0);
       }
     else
       {
@@ -643,8 +644,7 @@ class db_MySQLi
   /**
    * Frees result returned by QueryResult() and Prepare().
    * It is a good programming practise to give back what you have taken, so after processing
-   * your Multi-Row query with FetchResult() finally call this function to free the allocated
-   * memory.
+   * your Multi-Row query with FetchResult() finally call this function to free the allocated memory.
    * @param mixed $result The resource identifier you want to be freed. If not given the internal statement handle is used.
    * @return mixed The resulting code of mysqli_free_result (can be ignored).
    */
@@ -782,8 +782,7 @@ class db_MySQLi
    */
   private function getmicrotime()
     {
-    list($usec, $sec) = explode(" ",microtime());
-    return ((float)$usec + (float)$sec);
+    return (microtime(TRUE));
     } // getmicrotime()
 
   /**
@@ -1221,7 +1220,7 @@ class db_MySQLi
       }
     $this->characterset = $charset;
     return(1);
-    } // set_CharSet()
+    } // Set_CharSet()
 
   /**
    * Method to return the current MySQL setting for the character_set variables.
@@ -1240,7 +1239,7 @@ class db_MySQLi
       }
     $this->FreeResult($stmt);
     return($retarr);
-    } // get_CharSet()
+    } // Get_CharSet()
 
 	/**
 	 * Returns text representation for a given column type.
@@ -1477,7 +1476,7 @@ class db_MySQLi
       return(FALSE);
       }
     return($stmt);
-    }
+    } // Prepare()
 
   /**
    * Executes an prepared statement and optionally bind variables for bindvar-enabled queries.
@@ -1544,7 +1543,7 @@ class db_MySQLi
         }
       }
     return($metadata);
-    } //-- Execute()
+    } // Execute()
 
  /**
    * Single query method with Bind var support.
@@ -1645,10 +1644,6 @@ class db_MySQLi
    * Multirow query method with Bind var support.
    * Resflag can be "MYSQLI_NUM" or "MYSQLI_ASSOC" depending on what kind of array you want to be returned.
    * @param string $querystring The SQL query to send to database.
-   * @param integer $resflag Decides how the result should be returned:
-   *  - MYSQLI_ASSOC = Data is returned as assoziative array
-   *  - MYSQLI_NUM   = Data is returned as numbered array
-   *  - MYSQLI_BOTH  = Data is returned as both numbered and associative array.
    * @param integer $no_exit Decides how the class should react on errors. If you set this to 1 the class won't automatically exit on an error but instead return the mysqli_errno value.
    * @param array &$bindvars The array with bind vars for the given statement.
    * @return mixed Either an array as result of the query or an error code or TRUE.

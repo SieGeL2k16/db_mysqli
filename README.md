@@ -1,7 +1,6 @@
-Documentation for db_MySQLi class written by Sascha 'SieGeL' Pfalz
-==================================================================
+# db_MySQLi class Documentation written by Sascha 'SieGeL' Pfalz
 
-Last updated on 07-Mar-2016
+Last updated on 21-Jan-2017
 ---------------------------
 
 
@@ -21,16 +20,16 @@ are now part of this class.
 
 To use this class you have to met the following requirements:
 
-- PHP 5.x or 7.x with enabled "mysqli" extension. Tested with 5.6.18 and 7.0.4
+- PHP 5.x or 7.x with enabled "mysqli" extension. Tested with 5.6.29, 7.0.14 and 7.1.1
 
-- MySQL Database 4.x or newer. Tested with MySQL 5.6.29, 5.7.11 and MariaDB 5.5
+- MySQL Database 4.x or newer. Tested with MySQL 5.6.35, 5.7.17 and MariaDB 5.5
 
 
 ## 3. INSTALLATION AND USAGE
 
-Copy the supplied mysqlidb_class.php to a directory of your choice, a good
+Copy the supplied db_mysqli.class.php to a directory of your choice, a good
 place would be the inc/ directory of your project. Also copy the file
-dbdefs.inc.php to the same directory you have copied the mysqlidb_class.php
+dbdefs.inc.php to the same directory you have copied the db_mysqli.class.php
 file.
 
 The file "dbdefs.inc.php" serves as the configuration file for the class.
@@ -182,6 +181,8 @@ The class provides the following methods:
 
 This is the constructor of the class. Before you can use any of the class
 functions you have to create a new instance of it.
+NOTE: If you PHP installation has no mysqli functionality build in the class
+throws an exception in the constructor.
 
 Example:
 
@@ -420,9 +421,9 @@ has to be used.
 Performs an INSERT or REPLACE statement from a given variable list.
 The statements will be constructed as NEW Insert style, and aligned to the
 __max_allowed_packet__ boundary. This can dramatically improve bulk-inserts
-compared to fire every INSERT statement one by one. Note that this method
-ONLY (!) supports INSERT and REPLACE statements, all other types are not
-supporting these NEW-STYLE SQL statements.
+compared to fire every INSERT statement one by one.
+Note that this method ONLY (!) supports INSERT and REPLACE statements,
+all other types are not supporting these NEW-STYLE SQL statements.
 
 The array passed must be constructed with the keys defined as fieldnames and
 the values as the corresponding values.

@@ -15,7 +15,7 @@ ini_set('error_reporting' , E_ALL|E_NOTICE|E_STRICT);
 /**
  * Load in the class
  */
-require_once('../mysqlidb_class.php');
+require_once('../db_mysqli.class.php');
 
 /**
  * Returns an associative array with sapi-type name and required line break char.
