@@ -4,6 +4,9 @@ v0.2.6:
 
 01-Jun-2017 - Fixed warnings and wrong PHPDoc comments.
 
+            - MYSQLDB_COMPATIBLE_MODE is now working, previous version
+              called wrong method to enable this mode.
+
 v0.2.5:
 
 25-Jan-2017 - Public release as 0.2.5
