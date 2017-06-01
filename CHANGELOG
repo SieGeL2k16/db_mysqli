@@ -1,5 +1,9 @@
 APPLICATION=db_MySQLi Class
 
+v0.2.6:
+
+01-Jun-2017 - Fixed warnings and wrong PHPDoc comments.
+
 v0.2.5:
 
 25-Jan-2017 - Public release as 0.2.5

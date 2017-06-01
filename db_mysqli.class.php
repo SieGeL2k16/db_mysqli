@@ -17,7 +17,7 @@
 class db_MySQLi
   {
  /** Class version. */
-  private $classversion = '0.2.5';
+  private $classversion = '0.2.6';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -114,12 +114,13 @@ class db_MySQLi
   const DBOF_TYPE_DOUBLE    = 'd';
   const DBOF_TYPE_STRING    = 's';
   const DBOF_TYPE_BLOB      = 'b';
-
+  
   /**
    * Constructor of class.
    * The constructor takes default values from dbdefs.inc.php.
    * Please see this file for further informations about the setable options.
    * @param string $extconfig Optional other filename for dbdefs.inc.php, defaults to "dbdefs.inc.php".
+   * @throws Exception
    * @see dbdefs.inc.php
    */
   function __construct($extconfig='')
@@ -178,7 +179,7 @@ class db_MySQLi
 		// Check if compatible mode should be enabled:
 		if(defined('MYSQLDB_COMPATIBLE_MODE') && MYSQLDB_COMPATIBLE_MODE == TRUE)
 			{
-			$this->EnableCompatibleMode();
+			$this->SetCompatMode();
 			}
     $this->SAPI_type  = @php_sapi_name();
     } // __construct()
@@ -257,11 +258,11 @@ class db_MySQLi
       }
     if($pass!='')
       {
-      $this->pass = $pass;
+      $this->password = $pass;
       }
     else
       {
-      $this->pass = MYSQLDB_PASS;
+      $this->password = MYSQLDB_PASS;
       }
     if($host!='')
       {
@@ -303,8 +304,8 @@ class db_MySQLi
 			$db_host = $this->host;
 			}
     $start = $this->getmicrotime();
-    $this->printDebug('mysqli_connect('.sprintf("%s/%s@%s",$this->user,$this->pass,$db_host).')');
-    $this->sock = @mysqli_connect($db_host,$this->user,$this->pass,$this->database,$this->port);
+    $this->printDebug('mysqli_connect('.sprintf("%s/%s@%s",$this->user,$this->password,$db_host).')');
+    $this->sock = @mysqli_connect($db_host,$this->user,$this->password,$this->database,$this->port);
     if(!$this->sock)
       {
       $this->Print_Error('Connect(): Connection to '.$this->host.':'.$this->port.' failed!');
@@ -464,7 +465,8 @@ class db_MySQLi
       {
       exit;
       }
- 		} // Print_Error()
+ 		return(null);
+    } // Print_Error()
 
   /**
    * Performs a single-row query and returns result (if one exists).
@@ -602,7 +604,7 @@ class db_MySQLi
       }
     if(is_null($res) === TRUE)
       {
-      $resar = mysqli_fetch_array($result,$resflag);
+      $resar = @mysqli_fetch_array($result,$resflag);
       $this->querytime+= ($this->getmicrotime() - $start);
       return($resar);
       }
@@ -651,12 +653,13 @@ class db_MySQLi
   public function FreeResult($result=NULL)
     {
     $this->currentQuery = '';
-    $start = $this->getmicrotime();
+    $start  = $this->getmicrotime();
+    $myres  = null;
     if(is_null($result))
       {
       if(is_null($this->stmt)==false)
         {
-        $myres = @mysqli_free_result($this->stmt);
+        @mysqli_free_result($this->stmt);
         }
       $this->stmt = NULL;
       }
@@ -668,7 +671,7 @@ class db_MySQLi
         }
       else
         {
-        $myres = mysqli_free_result($result);
+        @mysqli_free_result($result);
         }
       }
     $this->querytime+= ($this->getmicrotime() - $start);
@@ -821,7 +824,7 @@ class db_MySQLi
 
   /**
    * Allows to set internal socket to external value.
-   * @param mixed New socket handle to set (as returned from mysqli_connect())
+   * @param mixed $extsock New socket handle to set (as returned from mysqli_connect())
    */
   public function SetConnectionHandle($extsock)
     {
@@ -840,6 +843,7 @@ class db_MySQLi
       {
       return($this->Print_Error('<b>!!! NOT CONNECTED TO A MYSQL DATABASE !!!</b>'));
       }
+    return(NULL);
     } // CheckSock()
 
   /**
@@ -909,7 +913,7 @@ class db_MySQLi
   /**
    * Sets autocommit flag.
    * @param bool $state TRUE = Autocommit enabled, FALSE = autocommit disabled.
-   * @param resource $extsock Optional an external mysqli connect resource, default is internally stored resource.
+   * @param mixed $extsock Optional an external mysqli connect resource, default is internally stored resource.
    * @return bool The returnvalue of mysqli_autocommit. FALSE in any case if no open link is found.
    * @see http://php.net/manual/en/mysqli.autocommit.php
    */
@@ -933,7 +937,7 @@ class db_MySQLi
   /**
    * Retrieves autocommit flag.
    * Note that this only works for connected (!) databases, as we have to read the state from the server!
-   * @param resource $extsock Optional an external mysqli connect resource. Default is internally stored resource.
+   * @param mixed $extsock Optional an external mysqli connect resource. Default is internally stored resource.
    * @return bool TRUE = autocommit is enabled, FALSE = autocommit is disabled.
    * @see http://php.net/manual/en/mysqli.autocommit.php
    */
@@ -955,7 +959,7 @@ class db_MySQLi
 
   /**
    * Commits the current transaction.
-   * @param resource $extsock Optional an external mysqli connect resource. Default is internally stored resource.
+   * @param mixed $extsock Optional an external mysqli connect resource. Default is internally stored resource.
    * @return bool The return value from mysqli_commit()
    * @see mysqli_commit
    */
@@ -978,7 +982,7 @@ class db_MySQLi
 
   /**
    * Rollback current transaction.
-   * @param resource $extsock Optional an external mysqli connect resource. Default is internally stored resource.
+   * @param mixed $extsock Optional an external mysqli connect resource. Default is internally stored resource.
    * @return bool The return value from mysqli_rollback()
    * @see http://php.net/manual/en/mysqli.rollback.php
    */
@@ -1240,12 +1244,13 @@ class db_MySQLi
     $this->FreeResult($stmt);
     return($retarr);
     } // Get_CharSet()
-
-	/**
-	 * Returns text representation for a given column type.
-	 * Taken from http://de1.php.net/manual/en/mysqli-result.fetch-field-direct.php#114882
-	 * @param integer $type_id The Id to convert.
-	 */
+  
+  /**
+   * Returns text representation for a given column type.
+   * Taken from http://de1.php.net/manual/en/mysqli-result.fetch-field-direct.php#114882
+   * @param integer $type_id The Id to convert.
+   * @return mixed|null
+   */
 	public static function Type2TXT($type_id)
 		{
 	  static $types;
@@ -1351,13 +1356,14 @@ class db_MySQLi
    * @param string $table_name Name of table to perform the insert against.
    * @param array &$fields The associative array
    * @param string $sql Either "INSERT" or "REPLACE", no other command is allowed here!
-   * @return array A numeric array with [0] => created query count, [1] => Querysize or FALSE in case of an error.
+   * @return array|bool A numeric array with [0] => created query count, [1] => Querysize or FALSE in case of an error.
    * @see examples/test_new_insert.php
    */
   function PerformNewInsert($table_name,&$fields,$sql='INSERT')
     {
     $qcount = 0;
     $qsize  = 0;
+    $data   = array();
 
     if(StrToUpper($sql) != 'INSERT' && StrToUpper($sql) != 'REPLACE')
       {
@@ -1477,7 +1483,7 @@ class db_MySQLi
       }
     return($stmt);
     } // Prepare()
-
+  
   /**
    * Executes an prepared statement and optionally bind variables for bindvar-enabled queries.
    * See examples/test_bind_vars.php for a working example.
@@ -1485,13 +1491,13 @@ class db_MySQLi
    * @param integer $no_exit Decides how the class should react on errors. If you set this to 1 the class won't automatically exit on an error but instead return the mysqli_errno value.
    * @param array $bindvars Associative array with variables to bind via mysqli_stmt_bind_param().
    * @since 0.2.0
+   * @return bool|int|mysqli_result|null
    */
   public function Execute($stmt,$no_exit = 0, &$bindvars=null)
     {
     if(is_null($bindvars) === FALSE)
       {
       $args = array($stmt,'');
-      $alist= array();
       for($b = 0; $b < count($bindvars); $b++)
         {
         $args[1] .= $bindvars[$b][1];
@@ -1637,6 +1643,7 @@ class db_MySQLi
         }
       }
     $this->FreeResult($stmt);
+    $this->querytime+= ($this->getmicrotime() - $start);
     return($row);
     } // QueryHash()
 
@@ -1686,7 +1693,6 @@ class db_MySQLi
     if(is_null($bindvars) === FALSE)
       {
       $args = array($stmt,'');
-      $alist= array();
       for($b = 0; $b < count($bindvars); $b++)
         {
         $args[1] .= $bindvars[$b][1];
@@ -1719,6 +1725,7 @@ class db_MySQLi
         return($this->Print_Error('QueryHash(): mysqli_stmt_execute() failed!'));
         }
       }
+    $this->querytime+= ($this->getmicrotime() - $start);
     return($stmt);
     } // QueryResultHash()
 

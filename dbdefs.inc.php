@@ -95,4 +95,4 @@ define('MYSQLDB_TIME_NAMES'     , 'de_DE');
  * In this case the old defines are defined to match the new class values.
  */
 define('MYSQLDB_COMPATIBLE_MODE'       , FALSE);
-?>
+
