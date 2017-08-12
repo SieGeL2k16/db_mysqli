@@ -6,7 +6,7 @@
  * See docs/ for a complete overview of all methods.
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 0.2.5 (21-Jan-2017)
+ * @version 0.2.7 (11-Aug-2017)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -17,7 +17,7 @@
 class db_MySQLi
   {
  /** Class version. */
-  private $classversion = '0.2.6';
+  private $classversion = '0.2.7';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -79,7 +79,7 @@ class db_MySQLi
 	/** Character set to use. */
 	private $locale = '';
 
-	/** Number of rows from result set */
+	/** Number of rows from result set (or affected rows when using bind vars) */
 	private $num_rows = 0;
 
   /** DEBUG: No Debug Info */
@@ -114,7 +114,7 @@ class db_MySQLi
   const DBOF_TYPE_DOUBLE    = 'd';
   const DBOF_TYPE_STRING    = 's';
   const DBOF_TYPE_BLOB      = 'b';
-  
+
   /**
    * Constructor of class.
    * The constructor takes default values from dbdefs.inc.php.
@@ -1029,12 +1029,17 @@ class db_MySQLi
     {
     if($extsock==-1)
       {
-      return(@mysqli_affected_rows($this->sock));
+      $rows = mysqli_affected_rows($this->sock);
       }
     else
       {
-      return(@mysqli_affected_rows($extsock));
+      $rows = mysqli_affected_rows($extsock);
       }
+    if($rows == -1)
+      {
+      $rows = $this->num_rows;
+      }
+    return($rows);
     } // AffectedRows()
 
   /**
@@ -1244,7 +1249,7 @@ class db_MySQLi
     $this->FreeResult($stmt);
     return($retarr);
     } // Get_CharSet()
-  
+
   /**
    * Returns text representation for a given column type.
    * Taken from http://de1.php.net/manual/en/mysqli-result.fetch-field-direct.php#114882
@@ -1483,7 +1488,7 @@ class db_MySQLi
       }
     return($stmt);
     } // Prepare()
-  
+
   /**
    * Executes an prepared statement and optionally bind variables for bindvar-enabled queries.
    * See examples/test_bind_vars.php for a working example.
@@ -1548,6 +1553,7 @@ class db_MySQLi
           }
         }
       }
+    $this->num_rows = mysqli_affected_rows($this->sock);
     return($metadata);
     } // Execute()
 

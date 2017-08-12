@@ -1,5 +1,11 @@
 APPLICATION=db_MySQLi Class
 
+v0.2.7:
+
+11-Aug-2017 - Fixed AffectedRows() when using prepared statements.
+              This value is now determined in Execute() and AffectedRows()
+              reacts properly.
+
 v0.2.6:
 
 01-Jun-2017 - Fixed warnings and wrong PHPDoc comments.
@@ -185,4 +191,3 @@ V0.1.0:
 
 10-Mar-2008 - Initial version, started as clone of MySQL & OCI8 class.
 -----------------------------------------------------------------------------
-
