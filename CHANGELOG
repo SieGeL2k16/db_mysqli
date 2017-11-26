@@ -2,9 +2,10 @@ APPLICATION=db_MySQLi Class
 
 v0.2.7:
 
-11-Aug-2017 - Fixed AffectedRows() when using prepared statements.
-              This value is now determined in Execute() and AffectedRows()
-              reacts properly.
+26-Nov-2017 - Public release as 0.2.7
+
+11-Aug-2017 - Fixed AffectedRows() when using prepared statements,this
+              value is now determined in Execute() and AffectedRows().
 
 v0.2.6:
 
