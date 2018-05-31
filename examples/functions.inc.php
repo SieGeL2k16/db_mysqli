@@ -1,11 +1,10 @@
 <?php
 /**
  * Set of functions used in the MySQLi examples.
- * @package db_MySQLi
+ * @package db_mysqli
  * @subpackage Examples
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 0.11 (24-Aug-2014)
- * $Id: functions.inc.php 26 2014-08-24 22:44:53Z siegel $
+ * @version 1.0.0 (31-May-2018)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 /**
@@ -55,6 +54,8 @@ function DBFooter($lf, &$dbh)
 
 /**
  * Prints out aligned text
+ * @param $maxlen
+ * @param $fstr
  */
 function PrintCon($maxlen,$fstr)
   {

@@ -3,14 +3,14 @@
 /**
  * Examples how to use the NumRows() and AffectedRows().
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQLi\Examples
- * @version 0.2.0 (07-Dec-2015)
+ * @package db_mysqli\Examples
+ * @version 1.0.0 (31-May-2018)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 /**
  */
 require('functions.inc.php');
-$db = new db_MySQLi('../dbdefs.inc.php');
+$db = new spfalz\db_mysqli('../dbdefs.inc.php');
 $d = WhichBR();
 if($d['SAPI'] != 'cli')
   {
@@ -28,4 +28,4 @@ $db->FreeResult($stmt);
 
 $db->Disconnect();
 exit;
-?>
+

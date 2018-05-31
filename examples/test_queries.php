@@ -6,14 +6,14 @@
  * Second a multi-row function is called (SHOW VARIABLES).
  * Also GetQueryCount() and GetQueryTime() usage is shown.
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQLi\Examples
- * @version 0.2.0 (07-Dec-2015)
+ * @package db_mysqli\Examples
+ * @version 1.0.0 (31-May-2018)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 /**
  */
 require('functions.inc.php');
-$db = new db_MySQLi('../dbdefs.inc.php');
+$db = new spfalz\db_mysqli('../dbdefs.inc.php');
 $d = WhichBR();
 if($d['SAPI'] != 'cli')
   {
@@ -21,7 +21,7 @@ if($d['SAPI'] != 'cli')
   }
 echo($d['LF']);
 
-$db->setErrorHandling(db_MySQLi::DBOF_SHOW_ALL_ERRORS);
+$db->setErrorHandling(spfalz\db_mysqli::DBOF_SHOW_ALL_ERRORS);
 $sock = $db->Connect();
 
 /*
@@ -61,4 +61,4 @@ if($d['SAPI'] != 'cli')
   {
   echo("</pre>\n");
   }
-?>
+

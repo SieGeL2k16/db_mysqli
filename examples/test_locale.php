@@ -3,14 +3,14 @@
 /**
  * Examples how change the locale of MySQL messages and how to change the character set.
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQLi\Examples
- * @version 0.2.0 (07-Dec-2015)
+ * @package db_mysqli\Examples
+ * @version 1.0.0 (31-May-2018)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 /**
  */
 require('functions.inc.php');
-$db = new db_MySQLi('../dbdefs.inc.php');
+$db = new spfalz\db_mysqli('../dbdefs.inc.php');
 $d = WhichBR();
 if($d['SAPI'] != 'cli')
   {
@@ -36,7 +36,7 @@ printf("New locale after changing to english...........: '%s'%s",$db->get_TimeNa
 
 // Read the names of some dates in english:
 
-$test_date = '2015-05-03';
+$test_date = '2018-05-31';
 
 $eng_dates = $db->Query("SELECT DATE_FORMAT('".$test_date."','%W %a %M %b') AS DF");
 
@@ -75,4 +75,4 @@ if($d['SAPI'] != 'cli')
   {
   echo("</pre>\n");
   }
-?>
+

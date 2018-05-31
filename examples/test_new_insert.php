@@ -3,14 +3,14 @@
 /**
  * Examples how to use the CreateNewInsert() method.
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQLi\Examples
- * @version 0.2.0 (07-Dec-2015)
+ * @package db_mysqli\Examples
+ * @version 1.0.0 (31-May-2018)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 /**
  */
 require('functions.inc.php');
-$db = new db_MySQLi('../dbdefs.inc.php');
+$db = new spfalz\db_mysqli('../dbdefs.inc.php');
 $d = WhichBR();
 if($d['SAPI'] != 'cli')
   {
@@ -22,7 +22,7 @@ if($d['SAPI'] != 'cli')
  */
 
 $table=<<<EOM
-CREATE TABLE IF NOT EXISTS db_MySQLi_new_insert_test
+CREATE TABLE IF NOT EXISTS db_mysqli_new_insert_test
   (
   id      INTEGER NOT NULL AUTO_INCREMENT,
   field1  VARCHAR(50),
@@ -57,12 +57,12 @@ $db->Connect();
 printf("Creating test table.%s%s",$d['LF'],$d['LF']);
 $db->Query($table);
 
-printf("Dump of testdata used to insert into \"db_MySQLi_new_insert_test\"%s%s",$d['LF'],$d['LF']);
+printf("Dump of testdata used to insert into \"db_mysqli_new_insert_test\"%s%s",$d['LF'],$d['LF']);
 
 print_r($testdata);
 printf("Now calling PerformNewInsert() on these data...%s%s",$d['LF'],$d['LF']);
 
-$retcode = $db->PerformNewInsert('db_MySQLi_new_insert_test',$testdata);
+$retcode = $db->PerformNewInsert('db_mysqli_new_insert_test',$testdata);
 if(!is_array($retcode))
   {
   $errmsg = $db->GetErrorText();
@@ -78,15 +78,15 @@ echo($d['HR']);
 printf("Reading table data:%s%s",$d['LF'],$d['LF']);
 printf("field1     | field2%s",$d['LF']);
 printf("-----------+------------------%s",$d['LF']);
-$query = 'SELECT field1, field2 FROM db_MySQLi_new_insert_test';
+$query = 'SELECT field1, field2 FROM db_mysqli_new_insert_test';
 $stmt = $db->QueryResult($query);
 while($data = $db->FetchResult($stmt))
   {
   printf("%10s | %s%s",$data['field1'],$data['field2'],$d['LF']);
   }
 $db->FreeResult($stmt);
-printf("%sFinally dropping test table \"db_MySQLi_new_insert_test\"%s%s",$d['LF'],$d['LF'],$d['LF']);
-$db->Query('DROP TABLE db_MySQLi_new_insert_test');
+printf("%sFinally dropping test table \"db_mysqli_new_insert_test\"%s%s",$d['LF'],$d['LF'],$d['LF']);
+$db->Query('DROP TABLE db_mysqli_new_insert_test');
 
 // Print out footer and disconnect from database.
 DBFooter($d['LF'],$db);
@@ -96,4 +96,4 @@ if($d['SAPI'] != 'cli')
   {
   echo("</pre>\n");
   }
-?>
+

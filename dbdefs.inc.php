@@ -3,7 +3,7 @@
  * All configuration defines for the mysqlidb_class.
  * Configure the database access here together with some other class options.
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQLi\Configuration
+ * @package db_mysqli\Configuration
  * @version 0.2.0 (07-Dec-2015)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
@@ -11,7 +11,7 @@
 /**
  * Name of application using this class (used in error.log etc.).
  */
-define('MYSQLAPPNAME' , 'db_MySQLi_class');
+define('MYSQLAPPNAME' , 'db_mysqli_class');
 
 /**
  * Hostname/IP address of database.
@@ -41,9 +41,9 @@ define('MYSQLDB_DATABASE' , 'siegel');
 
 /**
  * Modify default error behavour of class.
- * Default is db_MySQLi::DBOF_SHOW_NO_ERRORS if you omit this parameter.
+ * Default is db_mysqli::DBOF_SHOW_NO_ERRORS if you omit this parameter.
  */
-define('DB_ERRORMODE', db_MySQLi::DBOF_SHOW_ALL_ERRORS);
+define('DB_ERRORMODE', spfalz\db_mysqli::DBOF_SHOW_ALL_ERRORS);
 
 /**
  * Set address to be shown in case of an error.

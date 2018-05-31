@@ -12,8 +12,8 @@
  * database which allows to create/drop tables and INSERT/UPDATE data!
  * The example won't run until you setup a valid login for your database!
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQLi\Examples
- * @version 0.0.2.0 (07-Dec-2015)
+ * @package db_mysqli\Examples
+ * @version 1.0.0 (31-May-2018)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 /**
@@ -56,7 +56,7 @@ if(DB_USER == '' || DB_PASS == '' || DB_NAME == '')
  * Auto-error is on so if the logindata is wrong connect() won't return.
  */
 
-$db = new db_MySQLi;
+$db = new spfalz\db_mysqli;
 $db->Connect(DB_USER,DB_PASS,DB_HOST,DB_NAME,DB_PORT);
 
 /*
@@ -71,7 +71,7 @@ CREATE TABLE MYSQLi_DB_TEST
   TESTFIELD VARCHAR(200),
   PRIMARY KEY(ID)
   )
- COMMENT='db_MySQLi class testing table'
+ COMMENT='db_mysqli class testing table'
 EOM;
 
 echo('Creating test table "MYSQLi_DB_TEST" in database '.DB_NAME.'.'.$d['LF'].$d['LF']);

@@ -6,18 +6,20 @@
  * See docs/ for a complete overview of all methods.
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 0.2.7 (11-Aug-2017)
+ * @version 1.0.0 (31-May-2018)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
+namespace spfalz;
+
 /**
  * Main class definition.
- * @package db_MySQLi
+ * @package db_mysqli
  */
-class db_MySQLi
+class db_mysqli
   {
  /** Class version. */
-  private $classversion = '0.2.7';
+  private $classversion = '1.0.0';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -47,7 +49,7 @@ class db_MySQLi
   private $querytime = 0.000;
 
   /** Debugstate, default is OFF. */
-  protected $debug = db_MySQLi::DBOF_DEBUG_OFF;
+  protected $debug = self::DBOF_DEBUG_OFF;
 
   /** Stores active statement handle. */
   private $stmt = NULL;
@@ -68,7 +70,7 @@ class db_MySQLi
   private $currentQuery = '';
 
   /** Flag indicates how the class should interact with errors */
-  private $showError = db_MySQLi::DBOF_SHOW_NO_ERRORS;
+  private $showError = self::DBOF_SHOW_NO_ERRORS;
 
 	/** Flag indicates if persistant connections should be used */
 	private $usePConnect = FALSE;
@@ -120,7 +122,7 @@ class db_MySQLi
    * The constructor takes default values from dbdefs.inc.php.
    * Please see this file for further informations about the setable options.
    * @param string $extconfig Optional other filename for dbdefs.inc.php, defaults to "dbdefs.inc.php".
-   * @throws Exception
+   * @throws \Exception
    * @see dbdefs.inc.php
    */
   function __construct($extconfig='')
@@ -128,7 +130,7 @@ class db_MySQLi
     // Check if the mysqli_* functions exists:
     if(function_exists('mysqli_connect')==false)
       {
-      throw new Exception('ERROR: mysqli_connect() function does not exist in your PHP installation - class is not useable !');
+      throw new \Exception('ERROR: mysqli_connect() function does not exist in your PHP installation - class is not useable !');
       }
     if($extconfig == '')
       {
@@ -141,7 +143,7 @@ class db_MySQLi
     // Now check if important defines are correctly set in dbdefs.inc.php
     if(!defined('MYSQLAPPNAME'))
       {
-      $this->setErrorHandling(db_MySQLi::DBOF_SHOW_ALL_ERRORS);
+      $this->setErrorHandling(self::DBOF_SHOW_ALL_ERRORS);
       $this->Print_Error('dbdefs.inc.php: "MYSQLAPPNAME" IS MISSING! Please check Class installation!');
       }
 		$this->appname = MYSQLAPPNAME;
@@ -151,7 +153,7 @@ class db_MySQLi
       }
     else
       {
-      $this->setErrorHandling(db_MySQLi::DBOF_SHOW_NO_ERRORS);   // Default is not to show too much informations
+      $this->setErrorHandling(self::DBOF_SHOW_NO_ERRORS);   // Default is not to show too much informations
       }
     if(defined('MYSQLDB_ADMINEMAIL'))
       {
@@ -182,7 +184,7 @@ class db_MySQLi
 			$this->SetCompatMode();
 			}
     $this->SAPI_type  = @php_sapi_name();
-    } // __construct()
+    }
 
 	/**
 	 * Compatibility method to simulate old db_mysql class behavour.
@@ -192,27 +194,27 @@ class db_MySQLi
 		{
 		if(!defined('DBOF_DEBUGOFF'))
 			{
-			define('DBOF_DEBUGOFF', db_MySQLi::DBOF_DEBUG_OFF);
+			define('DBOF_DEBUGOFF', self::DBOF_DEBUG_OFF);
 			}
 		if(!defined('DBOF_DEBUGSCREEN'))
 			{
-			define('DBOF_DEBUGSCREEN', db_MySQLi::DBOF_DEBUG_SCREEN);
+			define('DBOF_DEBUGSCREEN', self::DBOF_DEBUG_SCREEN);
 			}
 		if(!defined('DBOF_DEBUGFILE'))
 			{
-			define('DBOF_DEBUGFILE', db_MySQLi::DBOF_DEBUG_FILE);
+			define('DBOF_DEBUGFILE', self::DBOF_DEBUG_FILE);
 			}
 		if(!defined('DBOF_SHOW_NO_ERRORS'))
 			{
-			define('DBOF_SHOW_NO_ERRORS', db_MySQLi::DBOF_SHOW_NO_ERRORS);
+			define('DBOF_SHOW_NO_ERRORS', self::DBOF_SHOW_NO_ERRORS);
 			}
 		if(!defined('DBOF_SHOW_ALL_ERRORS'))
 			{
-			define('DBOF_SHOW_ALL_ERRORS', db_MySQLi::DBOF_SHOW_ALL_ERRORS);
+			define('DBOF_SHOW_ALL_ERRORS', self::DBOF_SHOW_ALL_ERRORS);
 			}
 		if(!defined('DBOF_RETURN_ALL_ERRORS'))
 			{
-			define('DBOF_RETURN_ALL_ERRORS', db_MySQLi::DBOF_RETURN_ALL_ERRORS);
+			define('DBOF_RETURN_ALL_ERRORS', self::DBOF_RETURN_ALL_ERRORS);
 			}
     if(!defined('MYSQL_ASSOC'))
       {
@@ -226,7 +228,7 @@ class db_MySQLi
       {
       define('MYSQL_BOTH', MYSQLI_BOTH);
       }
-		} // EnableCompatibleMode()
+		}
 
   /**
    * Performs the connection to MySQL.
@@ -331,7 +333,7 @@ class db_MySQLi
         }
       }
     return($this->sock);
-    } // Connect()
+    }
 
   /**
    * Disconnects from MySQL.
@@ -353,14 +355,15 @@ class db_MySQLi
         }
       }
     $this->currentQuery = '';
-    } // Disconnect()
+    }
 
   /**
    * Prints out MySQL Error in own <div> container and exits.
-   * Please note that this function does not return as long as you have not set db_MySQLi::DBOF_RETURN_ALL_ERRORS!
+   * Please note that this function does not return as long as you have not set db_mysqli::DBOF_RETURN_ALL_ERRORS!
    * @param string $ustr User-defined Error string to show
    * @param mixed $var2dump Optionally a variable to print out with print_r()
  	 * @param integer $exit_on_error If set to default of 1 this function terminates execution of the script by calling exit, else it simply returns.
+   * @return mixed Depends on exit_on_error setup either error number or null
    */
   private function Print_Error($ustr="",$var2dump="", $exit_on_error = 1)
     {
@@ -385,7 +388,7 @@ class db_MySQLi
       {
       $errnum = -1;
       }
-    if($this->showError == db_MySQLi::DBOF_RETURN_ALL_ERRORS)
+    if($this->showError == self::DBOF_RETURN_ALL_ERRORS)
       {
       return($errnum);      // Return the error number
       }
@@ -396,8 +399,7 @@ class db_MySQLi
       {
       $crlf = "<br>\n";
       $space= '&nbsp;';
-      echo("<br>\n<div align=\"left\" style=\"background-color: #EEEEEE; color:#000000;border: 1px solid #000000;\">\n");
-      echo("<font color=\"red\" face=\"Arial,Sans-Serif\"><b>".strip_tags($this->appname).": Database Error occured!</b></font><br>\n<br>\n<code>\n");
+      echo("<br>\n<div align=\"left\" style=\"background-color: #EEEEEE; color:#000000;border: 1px solid #000000;\"><span style='color:#ff0000;font-weight:bold;'>".strip_tags($this->appname).": Database Error occured!</span><br>\n<br>\n<code>\n\n");
       }
     else
       {
@@ -406,7 +408,7 @@ class db_MySQLi
     echo($space."CODE: ".$errnum.$crlf);
     echo($space."DESC: ".$errstr.$crlf);
     echo($space."FILE: ".$filename.$crlf);
-    if($this->showError == db_MySQLi::DBOF_SHOW_ALL_ERRORS)
+    if($this->showError == self::DBOF_SHOW_ALL_ERRORS)
       {
       if($this->currentQuery!="")
         {
@@ -448,7 +450,7 @@ class db_MySQLi
         }
       echo("</code>\n");
       echo("</div>\n");
-      echo("<div align=\"right\"><small>PHP ".phpversion()." / db_MySQLi class ".$this->classversion."</small></div>\n");
+      echo("<div align=\"right\"><small>PHP ".phpversion()." / db_mysqli class ".$this->classversion."</small></div>\n");
     	@error_log(strip_tags($this->appname).': Error in '.$filename.': '.$ustr.' ('.chop(strip_tags($errstr)).')',0);
       }
     else
@@ -458,7 +460,7 @@ class db_MySQLi
         {
         echo("Please inform ".$this->AdminEmail." about this problem.\n");
         }
-      echo("\nRunning on PHP ".phpversion()." / db_MySQLi class ".$this->classversion."\n");
+      echo("\nRunning on PHP ".phpversion()." / db_mysqli class ".$this->classversion."\n");
       }
     $this->Disconnect();
    	if($exit_on_error)
@@ -466,7 +468,7 @@ class db_MySQLi
       exit;
       }
  		return(null);
-    } // Print_Error()
+    }
 
   /**
    * Performs a single-row query and returns result (if one exists).
@@ -496,7 +498,7 @@ class db_MySQLi
       }
     $this->PrintDebug($querystring);
     $this->currentQuery = $querystring;
-    if($this->showError == db_MySQLi::DBOF_RETURN_ALL_ERRORS)
+    if($this->showError == self::DBOF_RETURN_ALL_ERRORS)
       {
       $no_exit = 1;  // Override if user has set master define
       }
@@ -527,8 +529,7 @@ class db_MySQLi
     mysqli_free_result($rc);
     $this->querytime+= ($this->getmicrotime() - $start);
     return($row);
-    } // Query()
-
+    }
 
   /**
    * Performs a multi-row query and returns result identifier.
@@ -577,7 +578,7 @@ class db_MySQLi
       $this->stmt = $rc;
       }
     return($rc);
-    } // QueryResult()
+    }
 
   /**
    * Fetches next row from result handle.
@@ -598,7 +599,7 @@ class db_MySQLi
       }
     $start  = $this->getmicrotime();
     $res    = NULL;
-    if($result instanceof mysqli_stmt)
+    if($result instanceof \mysqli_stmt)
       {
       $res = @mysqli_stmt_result_metadata($result);
       }
@@ -641,7 +642,7 @@ class db_MySQLi
       }
     $this->querytime+= ($this->getmicrotime() - $start);
     return($row);
-    } // FetchResult()
+    }
 
   /**
    * Frees result returned by QueryResult() and Prepare().
@@ -665,7 +666,7 @@ class db_MySQLi
       }
     else
       {
-      if($result instanceof mysqli_stmt)
+      if($result instanceof \mysqli_stmt)
         {
         $myres = mysqli_stmt_close($result);
         }
@@ -676,31 +677,31 @@ class db_MySQLi
       }
     $this->querytime+= ($this->getmicrotime() - $start);
     return($myres);
-    } // FreeResult()
+    }
 
   /**
    * Sets debug level for debugging of SQL Queries.
    * $state can have these values:
-   * - db_MySQLi::DBOF_DEBUG_OFF    = Turn off debugging
-   * - db_MySQLi::DBOF_DEBUG_SCREEN = Turn on debugging on screen (every Query will be dumped on screen)
-   * - db_MySQLi::DBOF_DEBUG_FILE   = Turn on debugging on PHP errorlog
+   * - self::DBOF_DEBUG_OFF    = Turn off debugging
+   * - self::DBOF_DEBUG_SCREEN = Turn on debugging on screen (every Query will be dumped on screen)
+   * - self::DBOF_DEBUG_FILE   = Turn on debugging on PHP errorlog
    * You can mix the debug levels by adding the according defines!
    * @param integer $state The DEBUG Level you want to be set
    */
   public function SetDebug($state)
     {
     $this->debug = $state;
-    } // SetDebug()
+    }
 
   /**
    * Returns the current debug setting.
    * @return integer The debug setting (bitmask)
-   * @see db_MySQLi::SetDebug()
+   * @see self::SetDebug()
    */
   public function GetDebug()
     {
     return($this->debug);
-    } // GetDebug()
+    }
 
   /**
    * Handles output according to internal debug flag.
@@ -720,15 +721,15 @@ class db_MySQLi
       {
       $formatstr =  "DEBUG: %s\n";
       }
-    if($this->debug & db_MySQLi::DBOF_DEBUG_SCREEN)
+    if($this->debug & self::DBOF_DEBUG_SCREEN)
       {
       @printf($formatstr,$msg);
       }
-    if($this->debug & db_MySQLi::DBOF_DEBUG_FILE)
+    if($this->debug & self::DBOF_DEBUG_FILE)
       {
       @error_log('DEBUG: '.$msg,0);
       }
-    } // PrintDebug()
+    }
 
   /**
    * Returns version of this class.
@@ -737,7 +738,7 @@ class db_MySQLi
   public function GetClassVersion()
     {
     return($this->classversion);
-    } // GetClassVersion()
+    }
 
   /**
    * Returns MySQL Server Version.
@@ -758,7 +759,7 @@ class db_MySQLi
       $this->Disconnect();
       }
     return($ver);
-    } // Version()
+    }
 
   /**
    * Returns amount of queries executed by this class.
@@ -767,7 +768,7 @@ class db_MySQLi
   public function GetQueryCount()
     {
     return($this->querycounter);
-    } // GetQueryCount()
+    }
 
   /**
    * Returns amount of time spent on queries executed by this class.
@@ -776,7 +777,7 @@ class db_MySQLi
   public function GetQueryTime()
     {
     return($this->querytime);
-    } // GetQueryTime()
+    }
 
   /**
    * Returns microtime in format s.mmmmm.
@@ -786,20 +787,20 @@ class db_MySQLi
   private function getmicrotime()
     {
     return (microtime(TRUE));
-    } // getmicrotime()
+    }
 
   /**
    * Allows to set the class error reporting level in case of an error.
    *
-   * - db_MySQLi::DBOF_SHOW_NO_ERRORS    => Show no security-relevant informations
-   * - db_MySQLi::DBOF_SHOW_ALL_ERRORS   => Show all errors (useful for develop)
-   * - db_MySQLi::DBOF_RETURN_ALL_ERRORS => No error/autoexit, just return the mysql error code.
+   * - self::DBOF_SHOW_NO_ERRORS    => Show no security-relevant informations
+   * - self::DBOF_SHOW_ALL_ERRORS   => Show all errors (useful for develop)
+   * - self::DBOF_RETURN_ALL_ERRORS => No error/autoexit, just return the mysql error code.
    * @param integer $val The Error Handling mode you wish to use.
    */
   public function SetErrorHandling($val)
     {
     $this->showError = $val;
-    } // SetErrorHandling()
+    }
 
   /**
    * Retrieve current error reporting level.
@@ -809,7 +810,7 @@ class db_MySQLi
   public function GetErrorHandling()
     {
     return($this->showError);
-    } // GetErrorHandling()
+    }
 
   /**
    * Returns current connection handle.
@@ -820,7 +821,7 @@ class db_MySQLi
   public function GetConnectionHandle()
     {
     return($this->sock);
-    } // GetConnectionHandle()
+    }
 
   /**
    * Allows to set internal socket to external value.
@@ -829,7 +830,7 @@ class db_MySQLi
   public function SetConnectionHandle($extsock)
     {
     $this->sock = $extsock;
-    } // SetConnectionHandle()
+    }
 
   /**
    * Checks if we are already connected to our database.
@@ -844,7 +845,7 @@ class db_MySQLi
       return($this->Print_Error('<b>!!! NOT CONNECTED TO A MYSQL DATABASE !!!</b>'));
       }
     return(NULL);
-    } // CheckSock()
+    }
 
   /**
    * Send error email if programmer has defined a valid email address and enabled it with the define MYSQLDB_SENTMAILONERROR.
@@ -882,7 +883,7 @@ class db_MySQLi
       {
       $uagent = 'n/a';
       }
-    $message = "db_MySQLi class v".$this->classversion.": Error occured on ".date('r')." !!!\n\n";
+    $message = "db_mysqli class v".$this->classversion.": Error occured on ".date('r')." !!!\n\n";
     $message.= "      APPLICATION: ".$this->appname."\n";
     $message.= "  AFFECTED SERVER: ".$server."\n";
     $message.= "       USER AGENT: ".$uagent."\n";
@@ -902,13 +903,13 @@ class db_MySQLi
     $message.= "------------------------------------------------------------------------------------\n";
     if(defined('MYSQLDB_MAIL_EXTRAARGS') && MYSQLDB_MAIL_EXTRAARGS != '')
       {
-      @mail($this->AdminEmail,'db_MySQLi class v'.$this->classversion.' ERROR #'.$merrno.' OCCURED!',$message,MYSQLDB_MAIL_EXTRAARGS);
+      @mail($this->AdminEmail,'db_mysqli class v'.$this->classversion.' ERROR #'.$merrno.' OCCURED!',$message,MYSQLDB_MAIL_EXTRAARGS);
       }
     else
       {
-      @mail($this->AdminEmail,'db_MySQLi class v'.$this->classversion.' ERROR #'.$merrno.' OCCURED!',$message);
+      @mail($this->AdminEmail,'db_mysqli class v'.$this->classversion.' ERROR #'.$merrno.' OCCURED!',$message);
       }
-    } // SendMailOnError()
+    }
 
   /**
    * Sets autocommit flag.
@@ -932,7 +933,7 @@ class db_MySQLi
       return(FALSE);
       }
     return(@mysqli_autocommit($s,$state));
-    } // SetAutoCommit()
+    }
 
   /**
    * Retrieves autocommit flag.
@@ -955,7 +956,7 @@ class db_MySQLi
       $this->sock = $oldsock;   // Restore old value
       }
     return($data[0]);
-    } // GetAutoCommit()
+    }
 
   /**
    * Commits the current transaction.
@@ -978,7 +979,7 @@ class db_MySQLi
       return(FALSE);
       }
     return(@mysqli_commit($s));
-    } // Commit()
+    }
 
   /**
    * Rollback current transaction.
@@ -1001,7 +1002,7 @@ class db_MySQLi
       return(FALSE);
       }
     return(@mysqli_rollback($s));
-    } // Rollback()
+    }
 
   /**
    * Returns last used auto_increment id.
@@ -1018,7 +1019,7 @@ class db_MySQLi
       {
       return(@mysqli_insert_id($extsock));
       }
-    } // LastInsertId()
+    }
 
   /**
    * Returns count of affected rows by last DML operation.
@@ -1040,7 +1041,7 @@ class db_MySQLi
       $rows = $this->num_rows;
       }
     return($rows);
-    } // AffectedRows()
+    }
 
   /**
    * Retrieve last mysql error number.
@@ -1082,7 +1083,7 @@ class db_MySQLi
         return($merr);
         }
       }
-    } // GetErrno()
+    }
 
   /**
    * Retrieve last mysql error description.
@@ -1124,7 +1125,7 @@ class db_MySQLi
         return($merr);
         }
       }
-    } // GetErrorText()
+    }
 
   /**
    * Converts a MySQL default Datestring (YYYY-MM-DD HH:MI:SS) into a strftime() compatible format.
@@ -1149,7 +1150,7 @@ class db_MySQLi
       $fmtstring = '%c';
       }
     return(strftime($fmtstring,$ts));
-    } // ConvertMySQLDate()
+    }
 
   /**
    * Escapes a given string with the 'mysqli_real_escape_string' method.
@@ -1175,7 +1176,7 @@ class db_MySQLi
       $link = @mysqli_init();
       return(@mysqli_escape_string($link,$data));
       }
-    } // EscapeString()
+    }
 
   /**
    * Method to set the time_names setting of the MySQL Server.
@@ -1186,7 +1187,7 @@ class db_MySQLi
    */
   public function Set_TimeNames($locale)
     {
-    $rc = $this->Query("SET lc_time_names='".$locale."'",MYSQLI_NUM,1);
+    $rc = $this->Query("SET lc_time_names='".$this->EscapeString($locale)."'",MYSQLI_NUM,1);
     if($rc != 1)
       {
       $this->Print_Error('set_TimeNames(): Error while trying to set lc_time_names to "'.$locale.'" !!!');
@@ -1194,7 +1195,7 @@ class db_MySQLi
       }
     $this->locale = $locale;
     return(1);
-    } // Set_TimeNames()
+    }
 
   /**
    * Method to return the current MySQL setting for the lc_time_names variable.
@@ -1209,7 +1210,7 @@ class db_MySQLi
       return(0);
       }
     return($data[0]);
-    } // Get_TimeNames()
+    }
 
   /**
    * Method to set the character set of the current connection.
@@ -1229,7 +1230,7 @@ class db_MySQLi
       }
     $this->characterset = $charset;
     return(1);
-    } // Set_CharSet()
+    }
 
   /**
    * Method to return the current MySQL setting for the character_set variables.
@@ -1248,7 +1249,7 @@ class db_MySQLi
       }
     $this->FreeResult($stmt);
     return($retarr);
-    } // Get_CharSet()
+    }
 
   /**
    * Returns text representation for a given column type.
@@ -1263,15 +1264,22 @@ class db_MySQLi
 	    {
 	    $types = array();
 	    $constants = get_defined_constants(true);
-	    foreach ($constants['mysqli'] as $c => $n) if (preg_match('/^MYSQLI_TYPE_(.*)/', $c, $m)) $types[$n] = $m[1];
+	    foreach ($constants['mysqli'] as $c => $n)
+        {
+        if (preg_match('/^MYSQLI_TYPE_(.*)/', $c, $m))
+          {
+          $types[$n] = $m[1];
+          }
+        }
 	    }
     return array_key_exists($type_id, $types)? $types[$type_id] : NULL;
-		} // Type2TXT()
+		}
 
 	/**
 	 * Returns text representation for column flags.
 	 * Taken from http://de1.php.net/manual/en/mysqli-result.fetch-field-direct.php#114882
 	 * @param integer $flags_num The Flags to convert.
+   * @return string
 	 */
 	public static function Flags2TXT($flags_num)
 		{
@@ -1280,13 +1288,27 @@ class db_MySQLi
 	    {
 	    $flags = array();
 	    $constants = get_defined_constants(true);
-	    foreach ($constants['mysqli'] as $c => $n) if (preg_match('/MYSQLI_(.*)_FLAG$/', $c, $m)) if (!array_key_exists($n, $flags)) $flags[$n] = $m[1];
+	    foreach ($constants['mysqli'] as $c => $n)
+        {
+        if (preg_match('/MYSQLI_(.*)_FLAG$/', $c, $m))
+          {
+          if (!array_key_exists($n, $flags))
+            {
+            $flags[$n] = $m[1];
+            }
+          }
+        }
 	    }
     $result = array();
-	  foreach ($flags as $n => $t) if ($flags_num & $n) $result[] = $t;
+	  foreach ($flags as $n => $t)
+      {
+      if ($flags_num & $n)
+        {
+        $result[] = $t;
+        }
+      }
 	  return implode(' ', $result);
-		} // Flags2TXT()
-
+		}
 
   /**
    * Returns the description for a given table.
@@ -1313,15 +1335,15 @@ class db_MySQLi
       $this->PrintDebug('DescTable('.$tname.') called - Self-Connect: '.$weopen);
       }
     $start 		= $this->getmicrotime();
-    $query 		= 'SELECT * FROM '.$tname.' LIMIT 1';
+    $query 		= "SELECT * FROM ".$this->EscapeString($tname)." LIMIT 1";
 		$result		= @mysqli_stmt_result_metadata(@mysqli_prepare($this->sock,$query));
 		$lv				= 0;
 		while($fobj = @mysqli_fetch_field($result))
 			{
-			$retarray[$lv][db_MySQLi::DBOF_MYSQL_COLNAME] 	= $fobj->name;
-      $retarray[$lv][db_MySQLi::DBOF_MYSQL_COLTYPE]   = db_MySQLi::Type2TXT($fobj->type);
-      $retarray[$lv][db_MySQLi::DBOF_MYSQL_COLSIZE]   = $fobj->length;
-      $retarray[$lv][db_MySQLi::DBOF_MYSQL_COLFLAGS]  = db_MySQLi::Flags2TXT($fobj->flags);
+			$retarray[$lv][self::DBOF_MYSQL_COLNAME] 	= $fobj->name;
+      $retarray[$lv][self::DBOF_MYSQL_COLTYPE]   = self::Type2TXT($fobj->type);
+      $retarray[$lv][self::DBOF_MYSQL_COLSIZE]   = $fobj->length;
+      $retarray[$lv][self::DBOF_MYSQL_COLFLAGS]  = self::Flags2TXT($fobj->flags);
 			$lv++;
 			}
     @mysqli_free_result($result);
@@ -1331,7 +1353,7 @@ class db_MySQLi
       }
     $this->querytime+= ($this->getmicrotime() - $start);
     return($retarray);
-    } // DescTable()
+    }
 
   /**
    * Returns the number of rows in the result set.
@@ -1343,7 +1365,7 @@ class db_MySQLi
   function NumRows()
     {
     return($this->num_rows);
-    }	// NumRows()
+    }
 
   /**
    * Function performs an insert statement from a given variable list.
@@ -1437,9 +1459,8 @@ class db_MySQLi
         }
       $qcount++;
       }
-    //printf("QUERIES GENERATED: %d - total size of all queries: %d\n",$qcount,$qsize);
     return(array($qcount,$qsize));
-    } // PerformNewInsert()
+    }
 
  /**
    * Sets connection behavour.
@@ -1458,7 +1479,7 @@ class db_MySQLi
     $oldtype = $this->usePConnect;
     $this->usePConnect = $conntype;
     return($oldtype);
-    } // SetPConnect()
+    }
 
   /**
    * Returns current persistant connection flag.
@@ -1468,7 +1489,7 @@ class db_MySQLi
   public function GetPConnect()
     {
     return($this->usePConnect);
-    } // GetPConnect()
+    }
 
   /**
    * Prepares a SQL statement so that the variables can be bound afterwards.
@@ -1487,16 +1508,16 @@ class db_MySQLi
       return(FALSE);
       }
     return($stmt);
-    } // Prepare()
+    }
 
   /**
    * Executes an prepared statement and optionally bind variables for bindvar-enabled queries.
    * See examples/test_bind_vars.php for a working example.
-   * @param mysqli_stmt $stmt The statement handle as returned by Prepare()
+   * @param \mysqli_stmt $stmt The statement handle as returned by Prepare()
    * @param integer $no_exit Decides how the class should react on errors. If you set this to 1 the class won't automatically exit on an error but instead return the mysqli_errno value.
    * @param array $bindvars Associative array with variables to bind via mysqli_stmt_bind_param().
    * @since 0.2.0
-   * @return bool|int|mysqli_result|null
+   * @return bool|int|\mysqli_result|null
    */
   public function Execute($stmt,$no_exit = 0, &$bindvars=null)
     {
@@ -1555,7 +1576,7 @@ class db_MySQLi
       }
     $this->num_rows = mysqli_affected_rows($this->sock);
     return($metadata);
-    } // Execute()
+    }
 
  /**
    * Single query method with Bind var support.
@@ -1582,7 +1603,7 @@ class db_MySQLi
       }
     $this->PrintDebug($querystring);
     $this->currentQuery = $querystring;
-    if($this->showError == db_MySQLi::DBOF_RETURN_ALL_ERRORS)
+    if($this->showError == self::DBOF_RETURN_ALL_ERRORS)
       {
       $no_exit = 1;  // Override if user has set master define
       }
@@ -1605,7 +1626,7 @@ class db_MySQLi
         }
       }
     $result = $this->Execute($stmt,$no_exit,$bindvars);
-    if($result instanceof mysqli_result)
+    if($result instanceof \mysqli_result)
       {
       // Code below taken from http://php.net/manual/en/mysqli-stmt.bind-result.php#102179 and slightly modified - Thank you!
       $vars = array($stmt);
@@ -1651,7 +1672,7 @@ class db_MySQLi
     $this->FreeResult($stmt);
     $this->querytime+= ($this->getmicrotime() - $start);
     return($row);
-    } // QueryHash()
+    }
 
   /**
    * Multirow query method with Bind var support.
@@ -1674,7 +1695,7 @@ class db_MySQLi
       }
     $this->PrintDebug($querystring);
     $this->currentQuery = $querystring;
-    if($this->showError == db_MySQLi::DBOF_RETURN_ALL_ERRORS)
+    if($this->showError == self::DBOF_RETURN_ALL_ERRORS)
       {
       $no_exit = 1;  // Override if user has set master define
       }
@@ -1733,7 +1754,6 @@ class db_MySQLi
       }
     $this->querytime+= ($this->getmicrotime() - $start);
     return($stmt);
-    } // QueryResultHash()
+    }
 
-  } // db_MySQLi()
-
+  } // db_mysqli()

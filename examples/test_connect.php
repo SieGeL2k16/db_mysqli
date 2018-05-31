@@ -4,22 +4,22 @@
  * Examples how to handle connections to MySQL.
  * First connect try is without automatic error handling, second try is with automatic handling on.
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQLi\Examples
+ * @package db_mysqli\Examples
  * @version 0.2.0 (07-Dec-2015)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 /**
  */
 require('functions.inc.php');
-$db = new db_MySQLi('../dbdefs.inc.php');
+$db = new spfalz\db_mysqli('../dbdefs.inc.php');
 
 $d = WhichBR();
 
 /*
  * Turn off automatic error handling:
  */
-$db->SetErrorHandling(db_MySQLi::DBOF_RETURN_ALL_ERRORS);
-$db->SetDebug(db_MySQLi::DBOF_DEBUG_SCREEN);
+$db->SetErrorHandling(spfalz\db_mysqli::DBOF_RETURN_ALL_ERRORS);
+$db->SetDebug(spfalz\db_mysqli::DBOF_DEBUG_SCREEN);
 echo($d['LF']."Testing connectivity to MySQL (U=".MYSQLDB_USER."|P=".MYSQLDB_PASS."|H=".MYSQLDB_HOST."|DB=".MYSQLDB_DATABASE.')'.$d['LF'].$d['LF']);
 
 $sock = $db->Connect();
@@ -40,7 +40,7 @@ echo($d['LF'].'Now trying to connect with automatic error handling:'.$d['LF'].$d
  * Now turn on automatic error handling:
  */
 
-$db->setErrorHandling(db_MySQLi::DBOF_SHOW_ALL_ERRORS);
+$db->setErrorHandling(spfalz\db_mysqli::DBOF_SHOW_ALL_ERRORS);
 
 $sock = $db->Connect();
 echo('Connected'.$d['LF'].$d['LF']);
@@ -57,4 +57,3 @@ $db->Disconnect();
 
 
 DBFooter($d['LF'].$d['LF'],$db);
-?>

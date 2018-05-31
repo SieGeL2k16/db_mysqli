@@ -6,5 +6,5 @@ echo "Creating class documentation."
  --filename dbdefs.inc.php,db_mysqli.class.php \
  -t ./docs \
  --title  "MySQL Class utilizing the MySQLi PHP extension" \
- --defaultpackagename "db_MySQLi"
+ --defaultpackagename "db_mysqli"
 

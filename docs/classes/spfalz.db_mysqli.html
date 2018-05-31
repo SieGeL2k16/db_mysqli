@@ -1,0 +1,3187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>MySQL Class utilizing the MySQLi PHP extension</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">MySQL Class utilizing the MySQLi PHP extension</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/spfalz.html">\spfalz</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1740871912"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1740871912" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1855344635"></a>
+                                <a href="../namespaces/spfalz.html" style="margin-left: 30px; padding-left: 0">spfalz</a>
+            </div>
+            <div id="namespace-1855344635" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/spfalz.db_mysqli.html">db_mysqli</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/spfalz.html">\spfalz</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\spfalz</small>db_mysqli</h1>
+                    <p><em>Main class definition.</em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_SetCompatMode" class="">SetCompatMode()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Connect" class="">Connect()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Disconnect" class="">Disconnect()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Query" class="">Query()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_QueryResult" class="">QueryResult()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_FetchResult" class="">FetchResult()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_FreeResult" class="">FreeResult()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_SetDebug" class="">SetDebug()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_GetDebug" class="">GetDebug()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_PrintDebug" class="">PrintDebug()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_GetClassVersion" class="">GetClassVersion()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Version" class="">Version()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_GetQueryCount" class="">GetQueryCount()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_GetQueryTime" class="">GetQueryTime()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_SetErrorHandling" class="">SetErrorHandling()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_GetErrorHandling" class="">GetErrorHandling()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_GetConnectionHandle" class="">GetConnectionHandle()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_SetConnectionHandle" class="">SetConnectionHandle()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_CheckSock" class="">CheckSock()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_SetAutoCommit" class="">SetAutoCommit()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_GetAutoCommit" class="">GetAutoCommit()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Commit" class="">Commit()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Rollback" class="">Rollback()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_LastInsertId" class="">LastInsertId()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_AffectedRows" class="">AffectedRows()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_GetErrno" class="">GetErrno()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_GetErrorText" class="">GetErrorText()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_ConvertMySQLDate" class="">ConvertMySQLDate()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_EscapeString" class="">EscapeString()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Set_TimeNames" class="">Set_TimeNames()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Get_TimeNames" class="">Get_TimeNames()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Set_CharSet" class="">Set_CharSet()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Get_CharSet" class="">Get_CharSet()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Type2TXT" class="">Type2TXT()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Flags2TXT" class="">Flags2TXT()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_DescTable" class="">DescTable()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_NumRows" class="">NumRows()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_PerformNewInsert" class="">PerformNewInsert()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_SetPConnect" class="">SetPConnect()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_GetPConnect" class="">GetPConnect()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Prepare" class="">Prepare()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Execute" class="">Execute()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_QueryHash" class="">QueryHash()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_QueryResultHash" class="">QueryResultHash()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_DEBUG_OFF" class="">DBOF_DEBUG_OFF</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_DEBUG_SCREEN" class="">DBOF_DEBUG_SCREEN</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_DEBUG_FILE" class="">DBOF_DEBUG_FILE</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_SHOW_NO_ERRORS" class="">DBOF_SHOW_NO_ERRORS</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_SHOW_ALL_ERRORS" class="">DBOF_SHOW_ALL_ERRORS</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_RETURN_ALL_ERRORS" class="">DBOF_RETURN_ALL_ERRORS</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_MYSQL_COLNAME" class="">DBOF_MYSQL_COLNAME</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_MYSQL_COLTYPE" class="">DBOF_MYSQL_COLTYPE</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_MYSQL_COLSIZE" class="">DBOF_MYSQL_COLSIZE</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_MYSQL_COLFLAGS" class="">DBOF_MYSQL_COLFLAGS</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_TYPE_INT" class="">DBOF_TYPE_INT</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_TYPE_DOUBLE" class="">DBOF_TYPE_DOUBLE</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_TYPE_STRING" class="">DBOF_TYPE_STRING</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#constant_DBOF_TYPE_BLOB" class="">DBOF_TYPE_BLOB</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_sock" class="">$sock</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_host" class="">$host</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_user" class="">$user</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_password" class="">$password</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_database" class="">$database</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_port" class="">$port</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_appname" class="">$appname</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_debug" class="">$debug</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_Print_Error" class="">Print_Error()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_getmicrotime" class="">getmicrotime()</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#method_SendMailOnError" class="">SendMailOnError()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_classversion" class="">$classversion</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_querycounter" class="">$querycounter</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_querytime" class="">$querytime</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_stmt" class="">$stmt</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_myErrno" class="">$myErrno</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_myErrStr" class="">$myErrStr</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_AdminEmail" class="">$AdminEmail</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_SAPI_type" class="">$SAPI_type</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_currentQuery" class="">$currentQuery</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_showError" class="">$showError</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_usePConnect" class="">$usePConnect</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_characterset" class="">$characterset</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_locale" class="">$locale</a><br />
+                                                                    <a href="../classes/spfalz.db_mysqli.html#property_num_rows" class="">$num_rows</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/db_mysqli.class.html"><div class="path-wrapper">db_mysqli.class.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">db_mysqli</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\spfalz\db_mysqli</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_DEBUG_OFF" name="constant_DBOF_DEBUG_OFF" class="anchor"></a>
+            <article id="constant_DBOF_DEBUG_OFF" class="constant">
+                <h3 class="">DBOF_DEBUG_OFF</h3>
+                <pre class="signature">DBOF_DEBUG_OFF</pre>
+                <p><em>DEBUG: No Debug Info</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_DEBUG_SCREEN" name="constant_DBOF_DEBUG_SCREEN" class="anchor"></a>
+            <article id="constant_DBOF_DEBUG_SCREEN" class="constant">
+                <h3 class="">DBOF_DEBUG_SCREEN</h3>
+                <pre class="signature">DBOF_DEBUG_SCREEN</pre>
+                <p><em>DEBUG: Debug to screen</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_DEBUG_FILE" name="constant_DBOF_DEBUG_FILE" class="anchor"></a>
+            <article id="constant_DBOF_DEBUG_FILE" class="constant">
+                <h3 class="">DBOF_DEBUG_FILE</h3>
+                <pre class="signature">DBOF_DEBUG_FILE</pre>
+                <p><em>DEBUG: Debug to error.log</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_SHOW_NO_ERRORS" name="constant_DBOF_SHOW_NO_ERRORS" class="anchor"></a>
+            <article id="constant_DBOF_SHOW_NO_ERRORS" class="constant">
+                <h3 class="">DBOF_SHOW_NO_ERRORS</h3>
+                <pre class="signature">DBOF_SHOW_NO_ERRORS</pre>
+                <p><em>Displays errors with reduced informations and terminates execution.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_SHOW_ALL_ERRORS" name="constant_DBOF_SHOW_ALL_ERRORS" class="anchor"></a>
+            <article id="constant_DBOF_SHOW_ALL_ERRORS" class="constant">
+                <h3 class="">DBOF_SHOW_ALL_ERRORS</h3>
+                <pre class="signature">DBOF_SHOW_ALL_ERRORS</pre>
+                <p><em>Displays errors with all available informations and terminates execution.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_RETURN_ALL_ERRORS" name="constant_DBOF_RETURN_ALL_ERRORS" class="anchor"></a>
+            <article id="constant_DBOF_RETURN_ALL_ERRORS" class="constant">
+                <h3 class="">DBOF_RETURN_ALL_ERRORS</h3>
+                <pre class="signature">DBOF_RETURN_ALL_ERRORS</pre>
+                <p><em>Returns the error code back to the callee. You are responsible for error management.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_MYSQL_COLNAME" name="constant_DBOF_MYSQL_COLNAME" class="anchor"></a>
+            <article id="constant_DBOF_MYSQL_COLNAME" class="constant">
+                <h3 class="">DBOF_MYSQL_COLNAME</h3>
+                <pre class="signature">DBOF_MYSQL_COLNAME</pre>
+                <p><em>DescTable(): Column name.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_MYSQL_COLTYPE" name="constant_DBOF_MYSQL_COLTYPE" class="anchor"></a>
+            <article id="constant_DBOF_MYSQL_COLTYPE" class="constant">
+                <h3 class="">DBOF_MYSQL_COLTYPE</h3>
+                <pre class="signature">DBOF_MYSQL_COLTYPE</pre>
+                <p><em>DescTable(): Column type.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_MYSQL_COLSIZE" name="constant_DBOF_MYSQL_COLSIZE" class="anchor"></a>
+            <article id="constant_DBOF_MYSQL_COLSIZE" class="constant">
+                <h3 class="">DBOF_MYSQL_COLSIZE</h3>
+                <pre class="signature">DBOF_MYSQL_COLSIZE</pre>
+                <p><em>DescTable(): Column size.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_MYSQL_COLFLAGS" name="constant_DBOF_MYSQL_COLFLAGS" class="anchor"></a>
+            <article id="constant_DBOF_MYSQL_COLFLAGS" class="constant">
+                <h3 class="">DBOF_MYSQL_COLFLAGS</h3>
+                <pre class="signature">DBOF_MYSQL_COLFLAGS</pre>
+                <p><em>DescTable(): Column flags.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_TYPE_INT" name="constant_DBOF_TYPE_INT" class="anchor"></a>
+            <article id="constant_DBOF_TYPE_INT" class="constant">
+                <h3 class="">DBOF_TYPE_INT</h3>
+                <pre class="signature">DBOF_TYPE_INT</pre>
+                <p><em>Type definitions for QueryHash() / QueryResultHash()</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/mysqli-stmt.bind-param.php"><span class="namespace-wrapper">http://php.net/manual/en/mysqli-stmt.bind-param.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_TYPE_DOUBLE" name="constant_DBOF_TYPE_DOUBLE" class="anchor"></a>
+            <article id="constant_DBOF_TYPE_DOUBLE" class="constant">
+                <h3 class="">DBOF_TYPE_DOUBLE</h3>
+                <pre class="signature">DBOF_TYPE_DOUBLE</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_TYPE_STRING" name="constant_DBOF_TYPE_STRING" class="anchor"></a>
+            <article id="constant_DBOF_TYPE_STRING" class="constant">
+                <h3 class="">DBOF_TYPE_STRING</h3>
+                <pre class="signature">DBOF_TYPE_STRING</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_DBOF_TYPE_BLOB" name="constant_DBOF_TYPE_BLOB" class="anchor"></a>
+            <article id="constant_DBOF_TYPE_BLOB" class="constant">
+                <h3 class="">DBOF_TYPE_BLOB</h3>
+                <pre class="signature">DBOF_TYPE_BLOB</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_sock" name="property_sock" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$sock</h3>
+                <pre class="signature">$sock : </pre>
+                <p><em>Internal connection handle.</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_host" name="property_host" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$host</h3>
+                <pre class="signature">$host : </pre>
+                <p><em>Name of database to connect to</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_user" name="property_user" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$user</h3>
+                <pre class="signature">$user : </pre>
+                <p><em>Name of database user used for connection</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_password" name="property_password" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$password</h3>
+                <pre class="signature">$password : </pre>
+                <p><em>Password of database user used for connection</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_database" name="property_database" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$database</h3>
+                <pre class="signature">$database : </pre>
+                <p><em>Name of schema to be used</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_port" name="property_port" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$port</h3>
+                <pre class="signature">$port : </pre>
+                <p><em>Portnumber to use when connecting to MySQL</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_appname" name="property_appname" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$appname</h3>
+                <pre class="signature">$appname : </pre>
+                <p><em>Name of Application that uses this class</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_debug" name="property_debug" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$debug</h3>
+                <pre class="signature">$debug : </pre>
+                <p><em>Debugstate, default is OFF.</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_classversion" name="property_classversion" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$classversion</h3>
+                <pre class="signature">$classversion : </pre>
+                <p><em>Class version.</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_querycounter" name="property_querycounter" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$querycounter</h3>
+                <pre class="signature">$querycounter : </pre>
+                <p><em>Counts processed queries against the database</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_querytime" name="property_querytime" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$querytime</h3>
+                <pre class="signature">$querytime : </pre>
+                <p><em>Contains the total SQL execution time in microseconds.</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_stmt" name="property_stmt" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$stmt</h3>
+                <pre class="signature">$stmt : </pre>
+                <p><em>Stores active statement handle.</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_myErrno" name="property_myErrno" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$myErrno</h3>
+                <pre class="signature">$myErrno : </pre>
+                <p><em>Error code of last mysql operation (set in Print_Error())</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_myErrStr" name="property_myErrStr" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$myErrStr</h3>
+                <pre class="signature">$myErrStr : </pre>
+                <p><em>Error string of last mysql operation (set in Print_Error())</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_AdminEmail" name="property_AdminEmail" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$AdminEmail</h3>
+                <pre class="signature">$AdminEmail : </pre>
+                <p><em>Email Address for the administrator of this project</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SAPI_type" name="property_SAPI_type" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$SAPI_type</h3>
+                <pre class="signature">$SAPI_type : </pre>
+                <p><em>The SAPI type of php (used to detect CLI sapi)</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_currentQuery" name="property_currentQuery" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$currentQuery</h3>
+                <pre class="signature">$currentQuery : </pre>
+                <p><em>Contains the actual query to be processed.</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_showError" name="property_showError" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$showError</h3>
+                <pre class="signature">$showError : </pre>
+                <p><em>Flag indicates how the class should interact with errors</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_usePConnect" name="property_usePConnect" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$usePConnect</h3>
+                <pre class="signature">$usePConnect : </pre>
+                <p><em>Flag indicates if persistant connections should be used</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_characterset" name="property_characterset" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$characterset</h3>
+                <pre class="signature">$characterset : </pre>
+                <p><em>Character set to use.</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_locale" name="property_locale" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$locale</h3>
+                <pre class="signature">$locale : </pre>
+                <p><em>Character set to use.</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_num_rows" name="property_num_rows" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$num_rows</h3>
+                <pre class="signature">$num_rows : </pre>
+                <p><em>Number of rows from result set (or affected rows when using bind vars)</em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(string  <span class="argument">$extconfig = &#039;&#039;</span>) </pre>
+                <p><em>Constructor of class.</em></p>
+                <p>The constructor takes default values from dbdefs.inc.php.
+Please see this file for further informations about the setable options.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$extconfig </td>
+                                <td><p>Optional other filename for dbdefs.inc.php, defaults to &quot;dbdefs.inc.php&quot;.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Exception</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper">\spfalz\dbdefs.inc.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_SetCompatMode" name="method_SetCompatMode" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">SetCompatMode()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">SetCompatMode() </pre>
+                <p><em>Compatibility method to simulate old db_mysql class behavour.</em></p>
+                <p>You can enable this by setting the define MYSQLDB_COMPATIBLE_MODE to TRUE (defaults to FALSE).</p>
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Connect" name="method_Connect" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Connect()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Connect(string  <span class="argument">$user = &#039;&#039;</span>, string  <span class="argument">$pass = &#039;&#039;</span>, string  <span class="argument">$host = &#039;&#039;</span>, string  <span class="argument">$db = &#039;&#039;</span>, integer  <span class="argument">$port</span>) : mixed</pre>
+                <p><em>Performs the connection to MySQL.</em></p>
+                <p>If anything goes wrong calls Print_Error().
+You should set the defaults for your connection by setting user,pass,host,port and database in dbdefs.inc.php
+and leave connect() parameters empty.
+If there is an active connection already stored internally this value is returned and no new connection is made.
+If MYSQLDB_CHARACTERSET define is set a &quot;SET NAMES '<charset>'; is used straight after connecting.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$user </td>
+                                <td><p>Username used to connect to DB.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$pass </td>
+                                <td><p>Password to use for given username.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$host </td>
+                                <td><p>Hostname of database to connect to.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$db </td>
+                                <td><p>Schema to use on MySQL DB Server.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$port </td>
+                                <td><p>TCP port to use for connection. Defaults to 3306.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>Either the DB connection handle or NULL in case of an error.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Disconnect" name="method_Disconnect" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Disconnect()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Disconnect(mixed  <span class="argument">$other_sock = -1</span>) </pre>
+                <p><em>Disconnects from MySQL.</em></p>
+                <p>You may optionally pass an external link identifier.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$other_sock </td>
+                                <td><p>Optionally your own connection handle to close, else internal will be used.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Query" name="method_Query" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Query()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Query(string  <span class="argument">$querystring</span>, integer  <span class="argument">$resflag = MYSQLI_ASSOC</span>, integer  <span class="argument">$no_exit</span>) : mixed</pre>
+                <p><em>Performs a single-row query and returns result (if one exists).</em></p>
+                <p>Resflag can be MYSQLI_NUM or MYSQLI_ASSOC
+depending on what kind of array you want to be returned.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$querystring </td>
+                                <td><p>The SQL query to send to database.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$resflag </td>
+                                <td><p>Decides how the result should be returned:</p>
+<ul>
+<li>MYSQLI_ASSOC = Data is returned as assoziative array</li>
+<li>MYSQLI_NUM   = Data is returned as numbered array</li>
+<li>MYSQLI_BOTH  = Data is returned as both numbered and associative array.</li>
+</ul></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$no_exit </td>
+                                <td><p>Decides how the class should react on errors.
+If you set this to 1 the class won't automatically exit
+on an error but instead return the mysqli_errno value.
+Default of 0 means that the class calls Print_Error()
+and exists.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>Either an array as result of the query or an error code or TRUE.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_QueryResult" name="method_QueryResult" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">QueryResult()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">QueryResult(string  <span class="argument">$querystring</span>, integer  <span class="argument">$no_exit</span>) : mixed</pre>
+                <p><em>Performs a multi-row query and returns result identifier.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$querystring </td>
+                                <td><p>The Query to be executed</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$no_exit </td>
+                                <td><p>The error indicator flag, can be one of:</p>
+<ul>
+<li>0 = (Default), In case of an error Print_Error is called and script terminates</li>
+<li>1 = In case of an error this function returns the error from mysqli_errno()</li>
+</ul></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>A resource identifier or an errorcode (if $no_exit = 1)</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_FetchResult" name="method_FetchResult" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">FetchResult()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">FetchResult(mixed  <span class="argument">$result</span>, integer  <span class="argument">$resflag = MYSQLI_ASSOC</span>) : array</pre>
+                <p><em>Fetches next row from result handle.</em></p>
+                <p>Returns either numeric (MYSQLI_NUM) or associative (MYSQLI_ASSOC) array
+for one data row as pointed to by result var.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$result </td>
+                                <td><p>The resource identifier as returned by QueryResult()</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$resflag </td>
+                                <td><p>How you want the data to be returned:</p>
+<ul>
+<li>MYSQLI_ASSOC = Data is returned as assoziative array</li>
+<li>MYSQLI_NUM   = Data is returned as numbered array</li>
+</ul></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>One row of the resulting query or NULL if there are no data anymore</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_FreeResult" name="method_FreeResult" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">FreeResult()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">FreeResult(mixed  <span class="argument">$result = NULL</span>) : mixed</pre>
+                <p><em>Frees result returned by QueryResult() and Prepare().</em></p>
+                <p>It is a good programming practise to give back what you have taken, so after processing
+your Multi-Row query with FetchResult() finally call this function to free the allocated memory.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$result </td>
+                                <td><p>The resource identifier you want to be freed. If not given the internal statement handle is used.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>The resulting code of mysqli_free_result (can be ignored).</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_SetDebug" name="method_SetDebug" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">SetDebug()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">SetDebug(integer  <span class="argument">$state</span>) </pre>
+                <p><em>Sets debug level for debugging of SQL Queries.</em></p>
+                <p>$state can have these values:</p>
+<ul>
+<li>self::DBOF_DEBUG_OFF    = Turn off debugging</li>
+<li>self::DBOF_DEBUG_SCREEN = Turn on debugging on screen (every Query will be dumped on screen)</li>
+<li>self::DBOF_DEBUG_FILE   = Turn on debugging on PHP errorlog
+You can mix the debug levels by adding the according defines!</li>
+</ul>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$state </td>
+                                <td><p>The DEBUG Level you want to be set</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_GetDebug" name="method_GetDebug" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">GetDebug()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">GetDebug() : integer</pre>
+                <p><em>Returns the current debug setting.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>The debug setting (bitmask)</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="../classes/spfalz.db_mysqli.html#method_SetDebug"><span class="namespace-wrapper">\spfalz\db_mysqli::SetDebug()</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_PrintDebug" name="method_PrintDebug" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">PrintDebug()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">PrintDebug(string  <span class="argument">$msg</span>) </pre>
+                <p><em>Handles output according to internal debug flag.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$msg </td>
+                                <td><p>The Text to be included in the debug message.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_GetClassVersion" name="method_GetClassVersion" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">GetClassVersion()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">GetClassVersion() : string</pre>
+                <p><em>Returns version of this class.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>The version of this class.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Version" name="method_Version" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Version()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Version() : string</pre>
+                <p><em>Returns MySQL Server Version.</em></p>
+                <p>Opens an own connection if no active one exists.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>MySQL Server Version</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_GetQueryCount" name="method_GetQueryCount" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">GetQueryCount()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">GetQueryCount() : integer</pre>
+                <p><em>Returns amount of queries executed by this class.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>Query counter</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_GetQueryTime" name="method_GetQueryTime" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">GetQueryTime()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">GetQueryTime() : float</pre>
+                <p><em>Returns amount of time spent on queries executed by this class.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    float
+                                            &mdash; <p>Time in seconds.msecs spent in executin MySQL code.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_SetErrorHandling" name="method_SetErrorHandling" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">SetErrorHandling()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">SetErrorHandling(integer  <span class="argument">$val</span>) </pre>
+                <p><em>Allows to set the class error reporting level in case of an error.</em></p>
+                <ul>
+<li>self::DBOF_SHOW_NO_ERRORS    =&gt; Show no security-relevant informations</li>
+<li>self::DBOF_SHOW_ALL_ERRORS   =&gt; Show all errors (useful for develop)</li>
+<li>self::DBOF_RETURN_ALL_ERRORS =&gt; No error/autoexit, just return the mysql error code.</li>
+</ul>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$val </td>
+                                <td><p>The Error Handling mode you wish to use.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_GetErrorHandling" name="method_GetErrorHandling" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">GetErrorHandling()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">GetErrorHandling() : integer</pre>
+                <p><em>Retrieve current error reporting level.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>The Error Handling mode currently in use.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.1.1                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_GetConnectionHandle" name="method_GetConnectionHandle" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">GetConnectionHandle()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">GetConnectionHandle() : mixed</pre>
+                <p><em>Returns current connection handle.</em></p>
+                <p>Returns either the internal connection socket or -1 if no active handle exists.
+Useful if you want to work with mysqli* functions in parallel to this class.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>Internal socket value</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_SetConnectionHandle" name="method_SetConnectionHandle" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">SetConnectionHandle()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">SetConnectionHandle(mixed  <span class="argument">$extsock</span>) </pre>
+                <p><em>Allows to set internal socket to external value.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$extsock </td>
+                                <td><p>New socket handle to set (as returned from mysqli_connect())</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_CheckSock" name="method_CheckSock" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">CheckSock()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">CheckSock() </pre>
+                <p><em>Checks if we are already connected to our database.</em></p>
+                <p>If not terminates by calling Print_Error().</p>
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="../classes/spfalz.db_mysqli.html#method_Print_Error"><span class="namespace-wrapper">\spfalz\db_mysqli::Print_Error()</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.1.1                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_SetAutoCommit" name="method_SetAutoCommit" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">SetAutoCommit()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">SetAutoCommit(boolean  <span class="argument">$state</span>, mixed  <span class="argument">$extsock = -1</span>) : boolean</pre>
+                <p><em>Sets autocommit flag.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$state </td>
+                                <td><p>TRUE = Autocommit enabled, FALSE = autocommit disabled.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$extsock </td>
+                                <td><p>Optional an external mysqli connect resource, default is internally stored resource.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>The returnvalue of mysqli_autocommit. FALSE in any case if no open link is found.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/mysqli.autocommit.php"><span class="namespace-wrapper">http://php.net/manual/en/mysqli.autocommit.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_GetAutoCommit" name="method_GetAutoCommit" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">GetAutoCommit()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">GetAutoCommit(mixed  <span class="argument">$extsock = -1</span>) : boolean</pre>
+                <p><em>Retrieves autocommit flag.</em></p>
+                <p>Note that this only works for connected (!) databases, as we have to read the state from the server!</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$extsock </td>
+                                <td><p>Optional an external mysqli connect resource. Default is internally stored resource.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>TRUE = autocommit is enabled, FALSE = autocommit is disabled.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/mysqli.autocommit.php"><span class="namespace-wrapper">http://php.net/manual/en/mysqli.autocommit.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Commit" name="method_Commit" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Commit()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Commit(mixed  <span class="argument">$extsock = -1</span>) : boolean</pre>
+                <p><em>Commits the current transaction.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$extsock </td>
+                                <td><p>Optional an external mysqli connect resource. Default is internally stored resource.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>The return value from mysqli_commit()</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper">\spfalz\mysqli_commit</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Rollback" name="method_Rollback" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Rollback()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Rollback(mixed  <span class="argument">$extsock = -1</span>) : boolean</pre>
+                <p><em>Rollback current transaction.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$extsock </td>
+                                <td><p>Optional an external mysqli connect resource. Default is internally stored resource.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>The return value from mysqli_rollback()</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/mysqli.rollback.php"><span class="namespace-wrapper">http://php.net/manual/en/mysqli.rollback.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_LastInsertId" name="method_LastInsertId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">LastInsertId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">LastInsertId(mixed  <span class="argument">$extsock = -1</span>) : integer</pre>
+                <p><em>Returns last used auto_increment id.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$extsock </td>
+                                <td><p>Optionally an external MySQL socket to use. If not given the internal socket is used.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>The last automatic insert id that was assigned by the MySQL server.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_AffectedRows" name="method_AffectedRows" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">AffectedRows()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">AffectedRows(mixed  <span class="argument">$extsock = -1</span>) : integer</pre>
+                <p><em>Returns count of affected rows by last DML operation.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$extsock </td>
+                                <td><p>Optionally an external MySQLi socket to use. If not given the internal socket is used.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>The number of affected rows by previous DML operation.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_GetErrno" name="method_GetErrno" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">GetErrno()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">GetErrno(mixed  <span class="argument">$other_sock = -1</span>) : integer</pre>
+                <p><em>Retrieve last mysql error number.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$other_sock </td>
+                                <td><p>Optionally your own connection handle to check, else internal will be used.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>The MySQL error number of the last operation</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/mysqli.errno.php"><span class="namespace-wrapper">http://php.net/manual/en/mysqli.errno.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_GetErrorText" name="method_GetErrorText" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">GetErrorText()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">GetErrorText(mixed  <span class="argument">$other_sock = -1</span>) : string</pre>
+                <p><em>Retrieve last mysql error description.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$other_sock </td>
+                                <td><p>Optionally your own connection handle to check, else internal will be used.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>The MySQL error description of the last operation</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href="http://php.net/manual/en/mysqli.error.php"><span class="namespace-wrapper">http://php.net/manual/en/mysqli.error.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_ConvertMySQLDate" name="method_ConvertMySQLDate" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">ConvertMySQLDate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">ConvertMySQLDate(string  <span class="argument">$mysqldate</span>, string  <span class="argument">$fmtstring</span>) : string</pre>
+                <p><em>Converts a MySQL default Datestring (YYYY-MM-DD HH:MI:SS) into a strftime() compatible format.</em></p>
+                <p>You can use all format tags that strftime() supports, this function simply converts the mysql
+date string into a timestamp which is then passed to strftime together with your supplied
+format. The converted datestring is then returned.
+Please do not use this as default date converter, always use DATE_FORMAT() inside a query
+whenever possible as this is much faster than using this function! Only if you cannot use
+the MySQL SQL Date converting functions consider using this function.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$mysqldate </td>
+                                <td><p>The MySQL default datestring in format YYYY-MM-DD HH:MI:SS</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$fmtstring </td>
+                                <td><p>A strftime() compatible format string.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>The converted date string.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_EscapeString" name="method_EscapeString" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">EscapeString()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">EscapeString(string  <span class="argument">$str</span>) : string</pre>
+                <p><em>Escapes a given string with the &#039;mysqli_real_escape_string&#039; method.</em></p>
+                <p>Always use this function to avoid SQL injections when adding dynamic data to MySQL!
+This function also handles the settings for magic_quotes_gpc/magic_quotes_sybase, if
+these settings are enabled this function uses stripslashes() first.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$str </td>
+                                <td><p>The string to escape.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>The escaped string.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Set_TimeNames" name="method_Set_TimeNames" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Set_TimeNames()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Set_TimeNames(string  <span class="argument">$locale</span>) : integer</pre>
+                <p><em>Method to set the time_names setting of the MySQL Server.</em></p>
+                <p>Pass it a valid locale string to change the locale setting of MySQL.
+Note that this is supported only since 5.0.25 of MySQL!</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$locale </td>
+                                <td><p>A locale string for the language you want to set, i.e. 'de_DE'.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>0 If an error occures or 1 if change was successful.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Get_TimeNames" name="method_Get_TimeNames" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Get_TimeNames()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Get_TimeNames() : string</pre>
+                <p><em>Method to return the current MySQL setting for the lc_time_names variable.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>The current setting for the lc_time_names variable.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Set_CharSet" name="method_Set_CharSet" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Set_CharSet()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Set_CharSet(string  <span class="argument">$charset</span>) : integer</pre>
+                <p><em>Method to set the character set of the current connection.</em></p>
+                <p>You must specify a valid character set name, else the class will report an error.
+See <a href="http://dev.mysql.com/doc/refman/5.0/en/charset-charsets.html">http://dev.mysql.com/doc/refman/5.0/en/charset-charsets.html</a> for a list of supported character sets.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$charset </td>
+                                <td><p>The charset to set on the MySQL server side.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>1 If all works, else 0 in case of an error.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.1.1                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Get_CharSet" name="method_Get_CharSet" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Get_CharSet()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Get_CharSet() : array</pre>
+                <p><em>Method to return the current MySQL setting for the character_set variables.</em></p>
+                <p>Note that MySQL returns a list of settings, so this method returns all character_set related
+settings as an associative array.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>The current settings for the character_set variables.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.1.1                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Type2TXT" name="method_Type2TXT" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Type2TXT()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Type2TXT(integer  <span class="argument">$type_id</span>) : mixed|null</pre>
+                <p><em>Returns text representation for a given column type.</em></p>
+                <p>Taken from <a href="http://de1.php.net/manual/en/mysqli-result.fetch-field-direct.php#114882">http://de1.php.net/manual/en/mysqli-result.fetch-field-direct.php#114882</a></p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$type_id </td>
+                                <td><p>The Id to convert.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Flags2TXT" name="method_Flags2TXT" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Flags2TXT()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Flags2TXT(integer  <span class="argument">$flags_num</span>) : string</pre>
+                <p><em>Returns text representation for column flags.</em></p>
+                <p>Taken from <a href="http://de1.php.net/manual/en/mysqli-result.fetch-field-direct.php#114882">http://de1.php.net/manual/en/mysqli-result.fetch-field-direct.php#114882</a></p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$flags_num </td>
+                                <td><p>The Flags to convert.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_DescTable" name="method_DescTable" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">DescTable()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">DescTable(string  <span class="argument">$tname</span>) : array</pre>
+                <p><em>Returns the description for a given table.</em></p>
+                <p>Array returned has the following fields:
+0 =&gt; name of the field
+1 =&gt; type of field
+2 =&gt; The fieldsize
+3 =&gt; Field flags (like auto_increment).</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$tname </td>
+                                <td><p>Name of table to describe.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>Numerical array with all required table informations.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.1.1                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_NumRows" name="method_NumRows" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">NumRows()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">NumRows() : integer</pre>
+                <p><em>Returns the number of rows in the result set.</em></p>
+                <p>Use this after a SELECT or SHOW etc. command has been executed.
+For DML operations like INSERT, UPDATE, DELETE the method AffectedRows() has to be used.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>Number of affected rows.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.1.1                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_PerformNewInsert" name="method_PerformNewInsert" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">PerformNewInsert()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">PerformNewInsert(string  <span class="argument">$table_name</span>,   <span class="argument">$fields</span>, string  <span class="argument">$sql = &#039;INSERT&#039;</span>) : array|boolean</pre>
+                <p><em>Function performs an insert statement from a given variable list.</em></p>
+                <p>The insert statements will be constructed as NEW Insert style, and aligned to the &quot;max_allowed_packet&quot; boundary.
+This can dramatically improve bulk-inserts compared to fire every INSERT statement one by one.
+The array passed must be constructed with the keys defined as fieldnames and the values as the corresponding values.
+Looks like this:</p>
+<ul>
+<li>$data[0]['fieldname1'] = 'wert0/1';</li>
+<li>$data[0]['fieldname2'] = 'wert0/2';</li>
+<li>$data[1]['fieldname1'] = 'wert1/2';</li>
+<li>$data[1]['fieldname2'] = 'wert1/2';</li>
+</ul>
+<p>NOTE: Database must be connected!</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$table_name </td>
+                                <td><p>Name of table to perform the insert against.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$fields </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$sql </td>
+                                <td><p>Either &quot;INSERT&quot; or &quot;REPLACE&quot;, no other command is allowed here!</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array|boolean
+                                            &mdash; <p>A numeric array with [0] =&gt; created query count, [1] =&gt; Querysize or FALSE in case of an error.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper">\spfalz\examples/test_new_insert.php</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_SetPConnect" name="method_SetPConnect" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">SetPConnect()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">SetPConnect(boolean  <span class="argument">$conntype</span>) : boolean</pre>
+                <p><em>Sets connection behavour.</em></p>
+                <p>If FALSE class uses mysqli_connect to connect.
+If TRUE class uses mysqli_connect to connect with prefix &quot;p:&quot; (Persistant connection).</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$conntype </td>
+                                <td><p>The new setting for persistant connections.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>The previous state.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.1.1                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_GetPConnect" name="method_GetPConnect" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">GetPConnect()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">GetPConnect() : boolean</pre>
+                <p><em>Returns current persistant connection flag.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>The current setting (TRUE/FALSE).</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.1.3                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Prepare" name="method_Prepare" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Prepare()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Prepare(string  <span class="argument">$sql</span>) : mixed</pre>
+                <p><em>Prepares a SQL statement so that the variables can be bound afterwards.</em></p>
+                <p>Returns the statement handle or FALSE in case of an error.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$sql </td>
+                                <td><p>The Query to prepare</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>Either the valid statement handle or FALSE in case of an error.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.2.0                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Execute" name="method_Execute" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">Execute()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Execute(\mysqli_stmt  <span class="argument">$stmt</span>, integer  <span class="argument">$no_exit</span>, array  <span class="argument">$bindvars = null</span>) : boolean|integer|\mysqli_result|null</pre>
+                <p><em>Executes an prepared statement and optionally bind variables for bindvar-enabled queries.</em></p>
+                <p>See examples/test_bind_vars.php for a working example.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\mysqli_stmt</td>
+                                <td>$stmt </td>
+                                <td><p>The statement handle as returned by Prepare()</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$no_exit </td>
+                                <td><p>Decides how the class should react on errors. If you set this to 1 the class won't automatically exit on an error but instead return the mysqli_errno value.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$bindvars </td>
+                                <td><p>Associative array with variables to bind via mysqli_stmt_bind_param().</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean|integer|\mysqli_result|null
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.2.0                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_QueryHash" name="method_QueryHash" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">QueryHash()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">QueryHash(string  <span class="argument">$querystring</span>, integer  <span class="argument">$resflag = MYSQLI_ASSOC</span>, integer  <span class="argument">$no_exit</span>,   <span class="argument">$bindvars = null</span>) : mixed</pre>
+                <p><em>Single query method with Bind var support.</em></p>
+                <p>Resflag can be &quot;MYSQLI_NUM&quot; or &quot;MYSQLI_ASSOC&quot; depending on what kind of array you want to be returned.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$querystring </td>
+                                <td><p>The SQL query to send to database.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$resflag </td>
+                                <td><p>Decides how the result should be returned:</p>
+<ul>
+<li>MYSQLI_ASSOC = Data is returned as assoziative array</li>
+<li>MYSQLI_NUM   = Data is returned as numbered array</li>
+<li>MYSQLI_BOTH  = Data is returned as both numbered and associative array.</li>
+</ul></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$no_exit </td>
+                                <td><p>Decides how the class should react on errors. If you set this to 1 the class won't automatically exit on an error but instead return the mysqli_errno value.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$bindvars </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>Either an array as result of the query or an error code or TRUE.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.2.0                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_QueryResultHash" name="method_QueryResultHash" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">QueryResultHash()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">QueryResultHash(string  <span class="argument">$querystring</span>, integer  <span class="argument">$no_exit</span>,   <span class="argument">$bindvars = null</span>) : mixed</pre>
+                <p><em>Multirow query method with Bind var support.</em></p>
+                <p>Resflag can be &quot;MYSQLI_NUM&quot; or &quot;MYSQLI_ASSOC&quot; depending on what kind of array you want to be returned.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$querystring </td>
+                                <td><p>The SQL query to send to database.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$no_exit </td>
+                                <td><p>Decides how the class should react on errors. If you set this to 1 the class won't automatically exit on an error but instead return the mysqli_errno value.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$bindvars </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>Either an array as result of the query or an error code or TRUE.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            since
+                        </th>
+                        <td>
+                                                            0.2.1                                
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_Print_Error" name="method_Print_Error" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">Print_Error()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">Print_Error(string  <span class="argument">$ustr = &quot;&quot;</span>, mixed  <span class="argument">$var2dump = &quot;&quot;</span>, integer  <span class="argument">$exit_on_error = 1</span>) : mixed</pre>
+                <p><em>Prints out MySQL Error in own &lt;div&gt; container and exits.</em></p>
+                <p>Please note that this function does not return as long as you have not set db_mysqli::DBOF_RETURN_ALL_ERRORS!</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$ustr </td>
+                                <td><p>User-defined Error string to show</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$var2dump </td>
+                                <td><p>Optionally a variable to print out with print_r()</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$exit_on_error </td>
+                                <td><p>If set to default of 1 this function terminates execution of the script by calling exit, else it simply returns.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                            &mdash; <p>Depends on exit_on_error setup either error number or null</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getmicrotime" name="method_getmicrotime" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">getmicrotime()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getmicrotime() : float</pre>
+                <p><em>Returns microtime in format s.mmmmm.</em></p>
+                <p>Used to measure SQL execution time.</p>
+
+                
+                
+                                    <h4>Returns</h4>
+                    float
+                                            &mdash; <p>the current time in microseconds.</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_SendMailOnError" name="method_SendMailOnError" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">SendMailOnError()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">SendMailOnError(integer  <span class="argument">$merrno</span>, string  <span class="argument">$merrstr</span>, string  <span class="argument">$uerrstr</span>) </pre>
+                <p><em>Send error email if programmer has defined a valid email address and enabled it with the define MYSQLDB_SENTMAILONERROR.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$merrno </td>
+                                <td><p>MySQL errno number</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$merrstr </td>
+                                <td><p>MySQL error description</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$uerrstr </td>
+                                <td><p>User-supplied error description</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">db_mysqli.class.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/db_mysqli.class.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/spfalz.html">\spfalz</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on May 31st, 2018 at 23:35.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

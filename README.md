@@ -1,6 +1,6 @@
-# db_MySQLi class Documentation written by Sascha 'SieGeL' Pfalz
+# db_mysqli class Documentation written by Sascha 'SieGeL' Pfalz
 
-Last updated on 21-Jan-2017
+Last updated on 31-May-2018
 ---------------------------
 
 
@@ -147,7 +147,7 @@ can now start using the class, this would look like this for example:
 ```PHP
 require("mysqlidb_class.php");
 
-$db = new db_MySQLi;
+$db = new spfalz\db_mysqli;
 $db->Connect();
 $mver = $db->Version();
 $db->Disconnect();
@@ -155,14 +155,14 @@ echo("Your MySQL Server is V".$mver);
 ```
 
 As you can see in this example the dbdefs.inc.php file is automatically loaded
-when you create the first instance of the db_MySQLi object.
+when you create the first instance of the db_mysqli object.
 You can also use a different configfile by specifying a different path to
 your config inside the constructor, like this:
 
 ```PHP
 require("mysqlidb_class.php");
 
-$db = new db_MySQLi('/path/to/my/own/config.inc.php');
+$db = new spfalz\db_mysqli('/path/to/my/own/config.inc.php');
 $db->Connect();
 $mver = $db->Version();
 $db->Disconnect();
@@ -187,13 +187,13 @@ throws an exception in the constructor.
 Example:
 
 ```PHP
-$db = new db_MySQLi;
+$db = new spfalz\db_mysqli;
 ```
 
 You may also give an alternate path to the database definition file:
 
 ```PHP
-$db = new db_MySQLi("/path/to/your/own/dbdefs.inc.php");
+$db = new spfalz\db_mysqli("/path/to/your/own/dbdefs.inc.php");
 ```
 
 If you ommit the path to dbdefs.inc.php the class tries to include this file
@@ -228,7 +228,7 @@ Performs connection to a MySQL database server. Normally you do not have to
 supply here any of the parameters, as these parameters are taken from the
 dbdefs.inc.php file automatically.
 If an error occures during the connect attempt the class either returns an
-error code to the callee (if __DB_ERRORMODE__ is set to db_MySQLi::DBOF_RETURN_ALL_ERRORS)
+error code to the callee (if __DB_ERRORMODE__ is set to db_mysqli::DBOF_RETURN_ALL_ERRORS)
 or prints out an error message and terminates execution.
 If all goes well this method returns the connection handle. You do not have
 to save this value, the class stores this handle internally and uses this
@@ -453,7 +453,7 @@ choice before the query in question and the class dumps out what happens.
 Example:
 
 ```PHP
-$db->SetDebug(db_MySQLi::DBOF_DEBUGSCREEN);
+$db->SetDebug(db_mysqli::DBOF_DEBUGSCREEN);
 $db->Query('SELECT FOO FROM BAR WHERE DUMMY=1');
 ```
 
@@ -503,19 +503,19 @@ See http://php.net/manual/en/mysqli.autocommit.php for details.
 
 ### `void SetCompatMode(void)`
 
-If you are replacing my old db_MySQL class with this db_MySQLi class, you may
+If you are replacing my old db_MySQL class with this db_mysqli class, you may
 want to check first if all is working without affecting your source code.
 This method helps you by defining all old class constants as defines.
 The following list is defined (if not defined yet):
 
 OLD DEFINE                | VALUE ASSIGNED TO IT
 --------------------------|---------------------------------------
-DBOF_DEBUGOFF             | db_MySQLi::DBOF_DEBUG_OFF
-DBOF_DEBUGSCREEN          | db_MySQLi::DBOF_DEBUG_SCREEN
-DBOF_DEBUGFILE            | db_MySQLi::DBOF_DEBUG_FILE
-DBOF_SHOW_NO_ERRORS       | db_MySQLi::DBOF_SHOW_NO_ERRORS
-DBOF_SHOW_ALL_ERRORS      | db_MySQLi::DBOF_SHOW_ALL_ERRORS
-DBOF_RETURN_ALL_ERRORS    | db_MySQLi::DBOF_RETURN_ALL_ERRORS
+DBOF_DEBUGOFF             | db_mysqli::DBOF_DEBUG_OFF
+DBOF_DEBUGSCREEN          | db_mysqli::DBOF_DEBUG_SCREEN
+DBOF_DEBUGFILE            | db_mysqli::DBOF_DEBUG_FILE
+DBOF_SHOW_NO_ERRORS       | db_mysqli::DBOF_SHOW_NO_ERRORS
+DBOF_SHOW_ALL_ERRORS      | db_mysqli::DBOF_SHOW_ALL_ERRORS
+DBOF_RETURN_ALL_ERRORS    | db_mysqli::DBOF_RETURN_ALL_ERRORS
 MYSQL_ASSOC               | MYSQLI_ASSOC
 MYSQL_NUM                 | MYSQLI_NUM
 MYSQL_BOTH                | MYSQLI_BOTH
@@ -538,9 +538,9 @@ $state can have these values:
 
 CONSTANT                     | DESCRIPTION
 -----------------------------|--------------------------------------------------------------------
-db_MySQLi::DBOF_DEBUG_OFF    | Turn off debugging
-db_MySQLi::DBOF_DEBUG_SCREEN | Turn on debugging on screen (every Query will be dumped on screen)
-db_MySQLi::DBOF_DEBUG_FILE   | Turn on debugging on PHP errorlog
+db_mysqli::DBOF_DEBUG_OFF    | Turn off debugging
+db_mysqli::DBOF_DEBUG_SCREEN | Turn on debugging on screen (every Query will be dumped on screen)
+db_mysqli::DBOF_DEBUG_FILE   | Turn on debugging on PHP errorlog
 
 You can mix the debug levels by adding the according defines. Also you can
 retrieve the current debug level setting by calling the method `GetDebug()`.
@@ -552,9 +552,9 @@ Allows to set the class handling of errors.
 
 CONSTANT                          | DESCRIPTION
 ----------------------------------|------------------------------------------------------
-db_MySQLi::DBOF_SHOW_NO_ERRORS    | Show no security-relevant informations
-db_MySQLi::DBOF_SHOW_ALL_ERRORS   | Show all errors (useful for develop)
-db_MySQLi::DBOF_RETURN_ALL_ERRORS | No error/autoexit, just return the mysqli_error code.
+db_mysqli::DBOF_SHOW_NO_ERRORS    | Show no security-relevant informations
+db_mysqli::DBOF_SHOW_ALL_ERRORS   | Show all errors (useful for develop)
+db_mysqli::DBOF_RETURN_ALL_ERRORS | No error/autoexit, just return the mysqli_error code.
 
 
 ### `boolean setPConnect($conntype)`
@@ -650,10 +650,10 @@ following types:
 
 The class defines four constants for these values:
 
-db_MySQLi::DBOF_TYPE_INT;
-db_MySQLi::DBOF_TYPE_DOUBLE;
-db_MySQLi::DBOF_TYPE_STRING;
-db_MySQLi::DBOF_TYPE_BLOB;
+db_mysqli::DBOF_TYPE_INT;
+db_mysqli::DBOF_TYPE_DOUBLE;
+db_mysqli::DBOF_TYPE_STRING;
+db_mysqli::DBOF_TYPE_BLOB;
 
 See _examples/test_bind_vars.php_ for an example how to use it.
 
@@ -690,10 +690,10 @@ disabled.
 See _examples/test_bind_vars.php_ for an example how to use it.
 
 
-## 5. REPLACE "db_MySQL" with "db_MySQLi"
+## 5. REPLACE "db_MySQL" with "db_mysqli"
 
 If you have used my other MySQL class db_MySQL, you can simply replace that
-old class with this db_MySQLi class by changing the constructor from:
+old class with this db_mysqli class by changing the constructor from:
 
 ```PHP
 $db = new db_MySQL;
@@ -702,7 +702,7 @@ $db = new db_MySQL;
 to
 
 ```PHP
-$db = new db_MySQLi;
+$db = new spfalz\db_mysqli;
 ```
 
 If you have used the db_MySQL class constants in your code, you should
@@ -712,7 +712,7 @@ This method will set all class defines like "DBOF_SHOW_NO_ERRORS" and also
 the MYSQL_* defines, in case your PHP installation does not have the mysql
 extension included.
 Please try to avoid using the `SetCompatMode()`, it it always better to use the
-class prefix, so use i.e. db_MySQLi::DBOF_SHOW_NO_ERRORS.
+class prefix, so use i.e. db_mysqli::DBOF_SHOW_NO_ERRORS.
 
 
 

@@ -3,8 +3,8 @@
 /**
  * Examples how to use bind variables with the Query methods "QueryHash()" and "QueryResultHash()".
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @package db_MySQLi\Examples
- * @version 0.2.1 (07-Mar-2016)
+ * @package db_mysqli\Examples
+ * @version 1.0.0 (31-May-2018)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 /**
@@ -14,7 +14,7 @@ require('functions.inc.php');
 define('ROWS_TO_CREATE', 100000);
 define('MAX_ITERATIONS', 10000);
 
-$db = new db_MySQLi('../dbdefs.inc.php');
+$db = new spfalz\db_mysqli('../dbdefs.inc.php');
 $d = WhichBR();
 if($d['SAPI'] != 'cli')
   {
@@ -22,7 +22,7 @@ if($d['SAPI'] != 'cli')
   }
 echo($d['LF']);
 
-$db->setErrorHandling(db_MySQLi::DBOF_SHOW_ALL_ERRORS);
+$db->setErrorHandling(spfalz\db_mysqli::DBOF_SHOW_ALL_ERRORS);
 $sock = $db->Connect();
 
 /* Define some queries to create and drop our test table MYSQLI_DB_TEST_BINDVARS */
@@ -74,7 +74,7 @@ $stmt = $db->Prepare($SQL);
 $data = array();
 for($i = 0; $i < ROWS_TO_CREATE; $i++)
   {
-  $data = array([$i,db_MySQLi::DBOF_TYPE_INT], ['MANUAL_'.$i,db_MySQLi::DBOF_TYPE_STRING]);
+  $data = array([$i,spfalz\db_mysqli::DBOF_TYPE_INT], ['MANUAL_'.$i,spfalz\db_mysqli::DBOF_TYPE_STRING]);
   $rc = $db->Execute($stmt,0,$data);
   }
 $db->FreeResult($stmt);
@@ -91,7 +91,7 @@ for($i = 0; $i < MAX_ITERATIONS; $i++)
   $ID = mt_rand(0,(ROWS_TO_CREATE) -1);
 
   // Now fetch first a row with bind variables
-  $sp   = array([$ID,db_MySQLi::DBOF_TYPE_INT]);
+  $sp   = array([$ID,spfalz\db_mysqli::DBOF_TYPE_INT]);
   $rc = $db->QueryHash($SQL,MYSQLI_ASSOC,0,$sp);
   }
 printf("finished in %5.3fs (%5d = %s)\n\n",(microtime(true)-$start),$rc['ID'],$rc['NAME']);flush();
@@ -107,7 +107,7 @@ $stmt   = $db->Prepare($SQL);
 for($i = 0; $i < MAX_ITERATIONS; $i++)
   {
   $ID = mt_rand(0,(ROWS_TO_CREATE) -1);
-  $sp   = array([$ID,db_MySQLi::DBOF_TYPE_INT]);
+  $sp   = array([$ID,spfalz\db_mysqli::DBOF_TYPE_INT]);
   $db->Execute($stmt,0,$sp);
   $row = $db->FetchResult($stmt);
   }
