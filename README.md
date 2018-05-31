@@ -1,7 +1,6 @@
-# db_mysqli class Documentation written by Sascha 'SieGeL' Pfalz
+# db_mysqli class Documentation 
 
-Last updated on 31-May-2018
----------------------------
+#####Last updated on 31-May-2018
 
 
 ## 1. INTRODUCTION
