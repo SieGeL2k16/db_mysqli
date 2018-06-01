@@ -4,7 +4,7 @@
   "description": "MySQL database class using the mysqli extension",
   "keywords": ["mysqli","class","database","MySQL"],
   "homepage": "https://github.com/SieGeL2k16/db_mysqli/",
-  "license": "BSD",
+  "license": "BSD-2-Clause-FreeBSD",
   "authors": [
     {
       "name": "Sascha Pfalz",
