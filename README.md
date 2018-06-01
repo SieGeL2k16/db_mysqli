@@ -26,10 +26,20 @@ To use this class you have to met the following requirements:
 
 ## 3. INSTALLATION AND USAGE
 
+### 3.1 Composer
+
+If you are using composer add this class to your project by calling
+
+`composer require spfalz/db_mysqli`
+
+### 3.2 Manual installation
+
 Copy the supplied db_mysqli.class.php to a directory of your choice, a good
 place would be the inc/ directory of your project. Also copy the file
 dbdefs.inc.php to the same directory you have copied the db_mysqli.class.php
 file.
+
+### 3.3 Configuration
 
 The file "dbdefs.inc.php" serves as the configuration file for the class.
 You may give an alternate path to this file in the constructor of this class.
