@@ -1,6 +1,6 @@
 {
   "name": "spfalz/db_mysqi",
-  "type": "class",
+  "type": "library",
   "description": "MySQL database class using the mysqli extension",
   "keywords": ["mysqli","class","database"],
   "homepage": "https://github.com/SieGeL2k16/db_mysqli/",
