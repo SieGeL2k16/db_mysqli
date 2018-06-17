@@ -13,6 +13,9 @@
       "role": "Developer"
     }
   ],
+  "autoload": {
+    "files": ["db_mysqli.class.php"]
+  },
   "require": {
     "php": ">=5.3.0||^7.0"
   }

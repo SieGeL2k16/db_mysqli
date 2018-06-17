@@ -6,7 +6,7 @@
  * See docs/ for a complete overview of all methods.
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 1.0.0 (31-May-2018)
+ * @version 1.0.1 (17-Jun-2018)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -19,7 +19,7 @@ namespace spfalz;
 class db_mysqli
   {
  /** Class version. */
-  private $classversion = '1.0.0';
+  private $classversion = '1.0.1';
 
   /** Internal connection handle. */
   protected $sock = NULL;
