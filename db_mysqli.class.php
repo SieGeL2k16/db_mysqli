@@ -6,7 +6,7 @@
  * See docs/ for a complete overview of all methods.
  * Requires dbdefs.inc.php for global access data (user,pw,host,port,dbname,appname).
  * @author Sascha 'SieGeL' Pfalz <php@saschapfalz.de>
- * @version 1.0.1 (17-Jun-2018)
+ * @version 1.0.2 (02-Jan-2020)
  * @license http://opensource.org/licenses/bsd-license.php BSD License
  */
 
@@ -19,7 +19,7 @@ namespace spfalz;
 class db_mysqli
   {
  /** Class version. */
-  private $classversion = '1.0.1';
+  private $classversion = '1.0.2';
 
   /** Internal connection handle. */
   protected $sock = NULL;
@@ -1155,26 +1155,19 @@ class db_mysqli
   /**
    * Escapes a given string with the 'mysqli_real_escape_string' method.
    * Always use this function to avoid SQL injections when adding dynamic data to MySQL!
-   * This function also handles the settings for magic_quotes_gpc/magic_quotes_sybase, if
-   * these settings are enabled this function uses stripslashes() first.
    * @param string $str The string to escape.
    * @return string The escaped string.
    */
   public function EscapeString($str)
     {
-    $data = $str;
-    if(get_magic_quotes_gpc())
-      {
-      $data = stripslashes($data);
-      }
     if($this->sock)
       {
-      return(@mysqli_real_escape_string($this->sock,$data));
+      return(@mysqli_real_escape_string($this->sock,$str));
       }
     else
       {
       $link = @mysqli_init();
-      return(@mysqli_escape_string($link,$data));
+      return(@mysqli_escape_string($link,$str));
       }
     }
 

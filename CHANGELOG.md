@@ -1,3 +1,7 @@
+### v1.0.2 (02-Jan-2020)
+
+- Fixed deprecation warning under PHP 7.4.x
+
 ### v1.0.1
 
 ##### 17-Jun-2018
